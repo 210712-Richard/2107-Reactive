@@ -14,7 +14,7 @@ Jasmine
 Hello, my name is Jeevan and I like swimming.
 Joshua Muckey
 Kylie
-Luke
+Hello, my name is Luke and I like classic trucks.
 Hello, my name is Michael and I like yellow cheese.
 Quentin
 Sidd
