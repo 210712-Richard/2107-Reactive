@@ -16,7 +16,7 @@ Hello, my name Jasmine and I like tacos.
 Hello, my name is also Josh and I like food.
 Hello, my name is Jeevan and I like swimming.
 Hello, my name is Kylie and I like ice cream
-Luke
+Hello, my name is Luke and I like classic trucks.
 Hello, my name is Michael and I like yellow cheese.
 Hello, my name is Quentin and I like hiking.
 Hello, my name is Sutton and I like random things.
