@@ -6,7 +6,7 @@ Hello, my name is Joshua and I like music.
 Hello, my name is Alby and I like reading.
 Hello, my name is Brian and I like volleyball.
 Hello, my name is Carina and I like dogs.
-Elizabeth Kelvin
+Elizabeth Kelvin.I like to visit Rome
 Fara Binder
 Ivan
 Hello, my name is Fara and I like carrot cake Oreos.
@@ -23,6 +23,9 @@ Luke
 Hello, my name is Michael and I like yellow cheese.
 Hello, my name is Quentin and I like hiking.
 Sidd
+Sidd
+Stephen
+Hello, my name is Sutton and I like random things.
 Hello, my name is Sidd, and I like chicken wings.
 Hello, my name is Stephen and I like fireworks.
 Sutton
