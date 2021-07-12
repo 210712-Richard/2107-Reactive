@@ -1,6 +1,4 @@
 Hello, my name is Richard and I like bleu cheese.
-<<<<<<< HEAD
 Hello, my name is Jeevan and I like burrata cheese.
-=======
 Hello, my name is Richard and I like model kits.
->>>>>>> a7c7d6ac8d2df3f9817fc168db7d60cede8b3571
+Hello! My name is Danny, and I like foxes.
