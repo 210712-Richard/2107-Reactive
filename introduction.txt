@@ -1,5 +1,5 @@
 Hello, my name is Richard and I like bleu cheese.
-Hello, my name is Ellis and I like animation. 
+Hello, my name is Ellis and I like animation.
 Hello! My name is Danny, and I like foxes.
 Hello, my name is Richard and I like model kits.
 Hello, my name is Joshua and I like music.
@@ -8,7 +8,7 @@ Hello, my name is Brian and I like volleyball.
 Hello, my name is Carina and I like dogs.
 Elizabeth Kelvin
 Fara Binder
-Ivan 
+Ivan
 Jaclyn
 Jasmine
 Hello, my name is Jeevan and I like swimming.
@@ -16,10 +16,8 @@ Joshua Muckey
 Kylie
 Luke
 Hello, my name is Michael and I like yellow cheese.
-Quentin
+Hello, my name is Quentin and I like hiking.
 Sidd
 Stephen
 Sutton
 Khine
-
-
