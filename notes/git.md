@@ -20,6 +20,8 @@ Git is an SCM tool. Software Control Managment Software. It is a tool for tracki
 * `git push origin <branch name>` - Push the commits you have created to the remote repository.
 * `git pull origin <branch name>` - Retrieve all commits you don't have from remote repository.
 * `git checkout` - Allows you to change to another branch. The `-b` flag allows you to create a new branch.
+* `git fetch` - Allows you to retrieve other branches from the remote
+* `git branch` - Display all branches you have checked out. The `-a` flag allows you to see all branches.
 
 ## Definitions
 *branch* - A set of commits that are tracked separately from one another that can be merged later.
@@ -35,3 +37,5 @@ Git is an SCM tool. Software Control Managment Software. It is a tool for tracki
 * `git config user.name "<your username>"`
 * `git config user.email "<your email address>"`
 * `git checkout -b <first.last>`
+* `git pull origin main`
+* `git push origin <first.last>`
