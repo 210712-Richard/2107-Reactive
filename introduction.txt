@@ -1,2 +1,7 @@
 Hello, my name is Richard and I like bleu cheese.
+<<<<<<< HEAD
 Hello, my name is Jasmine and I like tacos.
+=======
+Hello, my name is Ellis and I like animation. 
+Hello! My name is Danny, and I like foxes.
+Hello, my name is Richard and I like model kits.
