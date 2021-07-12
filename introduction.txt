@@ -9,10 +9,10 @@ Hello, my name is Carina and I like dogs.
 Elizabeth Kelvin
 Hello, my name is Fara and I like carrot cake Oreos.
 Ivan 
-Jaclyn
 Jasmine
+Jeevan
+Hello, my name is also Josh and I like food.
 Hello, my name is Jeevan and I like swimming.
-Joshua Muckey
 Kylie
 Hello, my name is Luke and I like classic trucks.
 Hello, my name is Michael and I like yellow cheese.
@@ -21,3 +21,4 @@ Sidd
 Hello, my name is Stephen and I like fireworks.
 Sutton
 Khine
+Jaclyn: Hello. Jaclyn Lilly. I like cats (I have two)!
