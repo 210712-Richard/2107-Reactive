@@ -13,9 +13,10 @@ Jaclyn
 Jasmine
 Jeevan
 Hello, my name is also Josh and I like food.
+Hello, my name is Jeevan and I like swimming.
 Kylie
 Luke
-Michael
+Hello, my name is Michael and I like yellow cheese.
 Quentin
 Sidd
 Stephen
