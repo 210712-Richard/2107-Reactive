@@ -1,2 +1,9 @@
 Hello, my name is Richard and I like bleu cheese.
+<<<<<<< HEAD
 Hello, my name is Sidd and I like chicken wings.
+=======
+Hello, my name is Ellis and I like animation. 
+Hello! My name is Danny, and I like foxes.
+Hello, my name is Richard and I like model kits.
+
+>>>>>>> da92c491a616c897add6d59e73e09788c8d45797
