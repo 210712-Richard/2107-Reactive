@@ -18,9 +18,11 @@ Git is an SCM tool. Software Control Managment Software. It is a tool for tracki
 * `git add` - Adds a file to the list of tracked changes to our repository that will be added to the commit
 * `git commit -m "message"` - Creates a commit that can be added to the repository.
 * `git push origin <branch name>` - Push the commits you have created to the remote repository.
+* `git pull origin <branch name>` - Retrieve all commits you don't have from remote repository.
+* `git checkout` - Allows you to change to another branch. The `-b` flag allows you to create a new branch.
 
 ## Definitions
-*branch* -
+*branch* - A set of commits that are tracked separately from one another that can be merged later.
 *commit* - A group or subset of changes to the repository that can be pushed or pulled from the remote and allows us to make modifications to the repository.
 *merge conflict* -
 *gitignore* - 
@@ -29,4 +31,7 @@ Git is an SCM tool. Software Control Managment Software. It is a tool for tracki
 # Follow Along
 * `git clone https://github.com/210712-Richard/2107-Reactive`
 * `cd 2107-Reactive`
-* 
+* `git pull origin main`
+* `git config user.name "<your username>"`
+* `git config user.email "<your email address>"`
+* `git checkout -b <first.last>`
