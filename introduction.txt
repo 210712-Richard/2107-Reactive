@@ -7,7 +7,7 @@ Hello, my name is Alby and I like reading.
 Hello, my name is Brian and I like volleyball.
 Hello, my name is Carina and I like dogs.
 Elizabeth Kelvin
-Fara Binder
+Hello, my name is Fara and I like carrot cake Oreos.
 Ivan 
 Jaclyn
 Jasmine
@@ -21,5 +21,3 @@ Sidd
 Stephen
 Sutton
 Khine
-
-
