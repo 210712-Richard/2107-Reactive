@@ -9,6 +9,8 @@ Hello, my name is Carina and I like dogs.
 Elizabeth Kelvin
 Fara Binder
 Ivan
+Hello, my name is Fara and I like carrot cake Oreos.
+Ivan 
 Jaclyn
 Jasmine
 Hello, my name is Jeevan and I like swimming.
@@ -18,6 +20,6 @@ Luke
 Hello, my name is Michael and I like yellow cheese.
 Hello, my name is Quentin and I like hiking.
 Sidd
-Stephen
+Hello, my name is Stephen and I like fireworks.
 Sutton
 Khine
