@@ -5,4 +5,25 @@ Hello, my name is Richard and I like model kits.
 Hello, my name is Joshua and I like music.
 Hello, my name is Alby and I like reading.
 Hello, my name is Brian and I like volleyball.
+<<<<<<< HEAD
 Hello, my name is Jaclyn and I like cats. 
+=======
+Hello, my name is Carina and I like dogs.
+Elizabeth Kelvin
+Fara Binder
+Ivan 
+Jaclyn: Hello. Jaclyn Lilly. I like cats (I have two)!
+Jasmine
+Jeevan
+Joshua Muckey
+Kylie
+Luke
+Michael
+Quentin
+Sidd
+Stephen
+Sutton
+Khine
+
+
+>>>>>>> c86daa7df0a45a62f2dcd6bad3e63e820e63c0e1
