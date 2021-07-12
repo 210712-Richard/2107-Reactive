@@ -1,10 +1,23 @@
 Hello, my name is Richard and I like bleu cheese.
-<<<<<<< HEAD
-
-Hello, my name is Fara and I like carrot cake Oreos. 
-=======
 Hello, my name is Ellis and I like animation. 
 Hello! My name is Danny, and I like foxes.
 Hello, my name is Richard and I like model kits.
 Hello, my name is Joshua and I like music.
->>>>>>> d9d5f25ab8a0f58b4f5042c85d2d097732e0e893
+Hello, my name is Alby and I like reading.
+Hello, my name is Brian and I like volleyball.
+Hello, my name is Carina and I like dogs.
+Elizabeth Kelvin
+Hello, my name is Fara and I like carrot cake Oreos.
+Ivan 
+Jaclyn
+Jasmine
+Jeevan
+Joshua Muckey
+Kylie
+Luke
+Michael
+Quentin
+Sidd
+Stephen
+Sutton
+Khine
