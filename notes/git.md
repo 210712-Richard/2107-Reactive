@@ -39,3 +39,9 @@ Git is an SCM tool. Software Control Managment Software. It is a tool for tracki
 * `git checkout -b <first.last>`
 * `git pull origin main`
 * `git push origin <first.last>`
+* `git pull origin main`
+* Open the file `introduction.txt`
+* Add a line with your introduction.
+* Add that file to a commit.
+* Commit.
+* Push to your branch.
