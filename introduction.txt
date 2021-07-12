@@ -9,29 +9,5 @@ Hello, my name is Richard and I like model kits.
 Hello, my name is Joshua and I like music.
 Hello, my name is Alby and I like reading.
 Hello, my name is Brian and I like volleyball.
-<<<<<<< HEAD
 
 Hello, my name is Jasmine and I like tacos.
-=======
-Hello, my name is Carina and I like dogs.
-Elizabeth Kelvin
-Fara Binder
-Hello! my name is Ivan and I like playing soccer.
-Jaclyn
-Hello, my name is Fara and I like carrot cake Oreos.
-Hello, my name is Ivan and I like soccer.
-Jasmine
-Jeevan
-Hello, my name is also Josh and I like food.
-Hello, my name is Jeevan and I like swimming.
-Kylie
-Luke
-Hello, my name is Michael and I like yellow cheese.
-Quentin
-Hello, my name is Sidd, and I like chicken wings.
-Hello, my name is Stephen and I like fireworks.
-Sutton
-Khine
-Jaclyn: Hello. Jaclyn Lilly. I like cats (I have two)!
-
->>>>>>> 25d4358a64c919ed2e232bbc64a3d898be7f3391
