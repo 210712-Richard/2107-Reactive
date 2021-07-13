@@ -26,8 +26,8 @@ Git is an SCM tool. Software Control Managment Software. It is a tool for tracki
 ## Definitions
 *branch* - A set of commits that are tracked separately from one another that can be merged later.
 *commit* - A group or subset of changes to the repository that can be pushed or pulled from the remote and allows us to make modifications to the repository.
-*merge conflict* -
-*gitignore* - 
+*merge conflict* - When two commits modify the same piece of code.
+*gitignore* - A file that contains a list of files that should not be pushed to the repository. This is useful for compiled files, dependencies, and for files containing sensitive information.
 
 
 # Follow Along
