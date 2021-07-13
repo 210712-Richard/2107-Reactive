@@ -52,7 +52,7 @@ public class Hello /*extends Object */{
 		h = new Hello("hi");
 		h = new Hello(1, 3);
 	}
-	
+	public static final int NUMBER_WHEELS = 4;
 	/* 
 	 * Constructor: A special method used to instantiate objects. All classes have an implicit no-arguments constructor
 	 * 		unless they define a constructor.
