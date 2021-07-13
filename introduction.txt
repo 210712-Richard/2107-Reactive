@@ -22,16 +22,7 @@ Hello, my name is Quentin and I like hiking.
 Hello, my name is Sutton and I like random things.
 Hello, my name is Sidd, and I like chicken wings.
 Hello, my name is Stephen and I like fireworks.
-<<<<<<< HEAD
-Sutton
-Hello, my name is Khine and I like building mechanical keyboards.
-Jaclyn: Hello. Jaclyn Lilly. I like cats (I have two)!
-Hello, my name is Nikola and I like cake.
-=======
 Hello, my name is Khine and I like building mechanical keyboards.
 Hello, my name is Nikola and I like cake.
 Jaclyn: Hello. Jaclyn Lilly. I like cats (I have two)!
 Kyle
-
-
->>>>>>> fbf2fd5438a8d137855fc1659857199ff559ad0b
