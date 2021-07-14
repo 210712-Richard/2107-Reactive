@@ -16,16 +16,20 @@ Presentation Date: July 28th, 2021
 5. At least 1 thing user type 2 can do that user type 1 can not do.
 
 ### Example: Bank
+Both:
+1. Login
+
 Customer:
-1. Create an account (checking or savings)
-2. Deposit/withdraw into/from an account
-3. Apply for a loan
+1. Register for an account
+2. Create an account (checking or savings)
+3. Deposit/withdraw into/from an account
+4. Apply for a loan
 
 Teller:
 1. Approve a loan
 
 
-### Project Zero Phase 1 (Checking in Wednesday 7th, 2021)
+### Project Zero Phase 1 (Checking in Wednesday 21st, 2021)
 
 Create a console interface that allows you to call methods that perform the various functionalities listed.
 
