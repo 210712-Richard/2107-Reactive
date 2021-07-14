@@ -4,7 +4,7 @@
   * Conventions help other people read your code.
 * Scalability
 * Extensibility
-* Reusability
+* Reusability: When it is possible a reusable code base is going to save you time and hopeful increase the readabilty of your code.
 * Maintainability
 ## Definitions
 * *Explicit*: Stated visibly. Physically exists within the code.

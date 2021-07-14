@@ -11,12 +11,12 @@ import com.revature.beans.UserType;
 public class UserDAO {
 	// DAO = Database Access Object
 	// This is a class that is dedicated to accessing data from persistence.
-	
+	private static String filename = "users.dat";
 	private static List<User> users;
 	
 	static {
 		DataSerializer<User> ds = new DataSerializer<User>();
-		users = ds.readObjectsFromFile("users.dat");
+		users = ds.readObjectsFromFile(filename);
 		
 		// Helper for myself. If no users exist in the users.dat file (first startup) than I should create a few
 		if(users == null) {
@@ -27,6 +27,7 @@ public class UserDAO {
 			User u = new User(users.size(), "richard", "richard.orr@revature.com", LocalDate.of(1900, 1, 1), 1000l);
 			u.setType(UserType.GAME_MASTER);
 			users.add(u);
+			ds.writeObjectsToFile(users, filename);
 		}
 	}
 	
@@ -41,8 +42,14 @@ public class UserDAO {
 		return null;
 	}
 	
+	public void updateUser(User user) {
+		// due to us holding the entire list in memory, we will actually automatically update the user
+		// in the list anytime we change the fields of the user object.
+		// I'll leave this method as a placeholder for our Week 3 Database integration.
+	}
+	
 	public void writeToFile() {
-		new DataSerializer<User>().writeObjectsToFile(users, "users.dat");
+		new DataSerializer<User>().writeObjectsToFile(users, filename);
 	}
 
 }

@@ -2,6 +2,7 @@ package com.revature.menu;
 
 import java.util.Scanner;
 
+import com.revature.beans.GachaObject;
 import com.revature.beans.User;
 import com.revature.services.UserService;
 import com.revature.util.SingletonScanner;
@@ -53,13 +54,60 @@ public class Menu {
 		}
 	}
 	
-	public int startMenu() {
+	private int startMenu() {
 		//log
 		System.out.println("Welcome to HistoryCats!");
 		System.out.println("What would you like to do?");
 		System.out.println("\t1. Login");
 		System.out.println("\t2. Register");
 		System.out.println("\t3. Quit");
+		return select();
+	}
+	
+	private void player() {
+		player: while(true) {
+			switch(playerMenu()) {
+			case 1:
+				// daily bonus
+				if(us.hasCheckedIn(loggedUser)) {
+					System.out.println("Already checked in today, please try again tomorrow!");
+					break;
+				}
+				us.doCheckIn(loggedUser);
+				System.out.println("You gained "+GachaObject.DAILY_BONUS+" du-cats!");
+				System.out.println("Your new total is "+loggedUser.getCurrency()+" du-cats!");
+				break;
+			case 2:
+				// view currency
+				System.out.println("You currently have "+loggedUser.getCurrency()+" du-cats.");
+				break;
+			case 3:
+				// spend currency
+				break;
+			case 4:
+				loggedUser = null;
+				break player;
+			default:
+			}
+		}
+	}
+	
+	private int playerMenu() {
+		System.out.println("What would you like to do?");
+		System.out.println("\t1. Daily Bonus");
+		System.out.println("\t2. See Currency");
+		System.out.println("\t3. Summon");
+		System.out.println("\t4. Logout");
+		return select();
+	}
+	private void master() {
+		master: while(true) {
+			
+		}
+	}
+	
+	
+	private int select() {
 		int selection;
 		try {
 			selection = Integer.parseInt(scan.nextLine());
@@ -68,13 +116,6 @@ public class Menu {
 		}
 		//log
 		return selection;
-	}
-	
-	public void player() {
-		
-	}
-	public void master() {
-		
 	}
 
 }

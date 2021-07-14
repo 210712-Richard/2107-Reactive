@@ -13,11 +13,13 @@ public class User implements Serializable {
 	private LocalDate birthday;
 	private UserType type;
 	private Long currency;
+	private LocalDate lastCheckIn;
 	private List<GachaObject> inventory;
 	
 	public User() {
 		super();
 		this.type = UserType.PLAYER;
+		this.lastCheckIn = LocalDate.of(2021, 1, 1);
 	}
 	
 	public User(Integer id, String username, String email, LocalDate birthday, Long currency) {
@@ -81,6 +83,7 @@ public class User implements Serializable {
 		result = prime * result + ((email == null) ? 0 : email.hashCode());
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		result = prime * result + ((inventory == null) ? 0 : inventory.hashCode());
+		result = prime * result + ((lastCheckIn == null) ? 0 : lastCheckIn.hashCode());
 		result = prime * result + ((type == null) ? 0 : type.hashCode());
 		result = prime * result + ((username == null) ? 0 : username.hashCode());
 		return result;
@@ -120,6 +123,11 @@ public class User implements Serializable {
 				return false;
 		} else if (!inventory.equals(other.inventory))
 			return false;
+		if (lastCheckIn == null) {
+			if (other.lastCheckIn != null)
+				return false;
+		} else if (!lastCheckIn.equals(other.lastCheckIn))
+			return false;
 		if (type != other.type)
 			return false;
 		if (username == null) {
@@ -133,6 +141,14 @@ public class User implements Serializable {
 	@Override
 	public String toString() {
 		return "User [id=" + id + ", username=" + username + ", email=" + email + ", birthday=" + birthday + ", type="
-				+ type + ", currency=" + currency + ", inventory=" + inventory + "]";
+				+ type + ", currency=" + currency + ", lastCheckIn=" + lastCheckIn + ", inventory=" + inventory + "]";
+	}
+
+	public LocalDate getLastCheckIn() {
+		return lastCheckIn;
+	}
+
+	public void setLastCheckIn(LocalDate lastCheckIn) {
+		this.lastCheckIn = lastCheckIn;
 	}
 }
