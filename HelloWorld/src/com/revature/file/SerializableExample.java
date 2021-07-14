@@ -14,7 +14,7 @@ import java.util.List;
 // Serialization has fallen out of favor and in current editions of Java is deprecated.
 // Alternatives to Serialization are data marshalling in easy to parse formats (XML or JSON)
 public class SerializableExample {
-	private static List<Cat> cats = new ArrayList<Cat>();
+	private static List<Object> cats = new ArrayList<Object>();
 	
 	public static void main(String[] args) {
 		//populateArrayList();
@@ -24,17 +24,17 @@ public class SerializableExample {
 		writeCatsToFile(cats, "cats.dat");
 	}
 	
-	private static List<Cat> readCatsFromFile(String filename) {
-		List<Cat> cats = null;
+	private static List<Object> readCatsFromFile(String filename) {
+		List<Object> cats = null;
 		try(ObjectInputStream o = new ObjectInputStream(new FileInputStream(filename));){
-			cats = (ArrayList<Cat>) o.readObject();
+			cats = (ArrayList<Object>) o.readObject();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return cats;
 	}
 
-	public static void writeCatsToFile(List<Cat> cats, String filename) {
+	public static void writeCatsToFile(List<Object> cats, String filename) {
 		try (ObjectOutputStream o = new ObjectOutputStream(new FileOutputStream(filename));){
 			o.writeObject(cats);
 		} catch (IOException e) {
@@ -43,23 +43,23 @@ public class SerializableExample {
 	}
 	
 	public static void populateArrayList() {
-		cats.add(new Cat("Sprankles", "Calico"));
-		cats.add(new Cat("Susan", "White"));
-		cats.add(new Cat("Paul", "Gray"));
-		cats.add(new Cat("Aang", "Black"));
-		cats.add(new Cat("George", "Orange"));
+		cats.add(new Object("Sprankles", "Calico"));
+		cats.add(new Object("Susan", "White"));
+		cats.add(new Object("Paul", "Gray"));
+		cats.add(new Object("Aang", "Black"));
+		cats.add(new Object("George", "Orange"));
 	}
 }
 
 
-class Cat implements Serializable {
+class Object implements Serializable {
 	public String name;
 	public String color;
 	
-	public Cat() {
+	public Object() {
 		super();
 	}
-	public Cat(String name, String color) {
+	public Object(String name, String color) {
 		this.name = name;
 		this.color=color;
 	}
@@ -83,27 +83,7 @@ class Cat implements Serializable {
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		return result;
 	}
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Cat other = (Cat) obj;
-		if (color == null) {
-			if (other.color != null)
-				return false;
-		} else if (!color.equals(other.color))
-			return false;
-		if (name == null) {
-			if (other.name != null)
-				return false;
-		} else if (!name.equals(other.name))
-			return false;
-		return true;
-	}
+	
 	@Override
 	public String toString() {
 		return "Cat [name=" + name + ", color=" + color + "]";

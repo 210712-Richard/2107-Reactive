@@ -3,4 +3,12 @@
   <groupId>com.revature</groupId>
   <artifactId>GachaGame</artifactId>
   <version>0.0.1-SNAPSHOT</version>
+  <packaging>jar</packaging>
+  
+  <!-- Storing configuration as code. Rather than leaving a readme that tells our coworkers that they need
+  		to manually change the target environment to 1.8, we leave a pom file that will do that. -->
+  <properties>
+  	<maven.compiler.source>1.8</maven.compiler.source>
+  	<maven.compiler.target>1.8</maven.compiler.target>
+  </properties>
 </project>
