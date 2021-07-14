@@ -27,11 +27,89 @@ public class Primitives {
 		// literalValues();
 		// implicitCasting();
 		// objectsVsPrimitives();
-		System.out.println(parseInt("-234"));
-		System.out.println(parseInt("-234-6"));
-		System.out.println(parseInt("-hello"));
+		//System.out.println(parseInt("-234"));
+		//System.out.println(parseInt("-234-6"));
+		//System.out.println(parseInt("-hello"));
+		overloading();
 	}
 
+	/*
+	 * Overloading: Using the same name for a method with different parameters. Overloaded methods may have different return types,
+	 * 		and may throw different exceptions, but must have different parameters.
+	 * 
+	 * Overloading is a form of runtime polymorphism - overloading occurs at runtime, when the JVM determines the best match
+	 * 	for a method call.
+	 * 
+	 * Overloading Precedence
+	 * 1. Exact Match: Is there a match where I don't have to do any work?
+	 * 2. Implicit Cast: Is there a match if I just cast something?
+	 * 3. Autoboxing: Can I turn an object into a primitive or a primitive into an object?
+	 * 4. VarArgs: 
+	 */
+	
+	private static void overloading() {
+		int intPrimitive = 5;
+		Integer intObject = 5;
+		short shortPrimitive = 5;
+		Short shortObject = 5;
+		long longPrimitive = 5;
+		Long longObject = 5l;
+		Byte byteObject = 3;
+
+		method(intPrimitive); // Exact Match - 1
+		method(shortPrimitive); // Implicit Cast - 1
+		method(intObject); // Autoboxing - 1
+		method(shortObject); // Exact Match - 2
+		method(byteObject); // Unwrap and Implicit Cast - 1
+		method(longPrimitive);
+		method(longObject);
+		
+		method(intPrimitive, longPrimitive); // exact match - 5
+		method(intPrimitive, intPrimitive); // implicit cast - 5
+		//method(intPrimitive, longObject); // ambiguous. JVM has to do the same amount of work, for both options, and chooses neither.
+		// If the JVM has multiple methods it could call with specific parameters it will refuse to choose.
+		method(intPrimitive, longObject.longValue()); // exact match - 5
+		method(intObject, shortPrimitive); //implicit - 4
+		method(1);
+		method(1, 1);
+		method(1, 1, 1);
+		method(1, 1, 1, 1);
+		int[] arr = {1, 2, 3, 4, 5, 6, 7};
+		method(1, arr);
+		method(1, '2', '4');
+		method(1, intObject, 6, 7, shortObject);
+	}
+	
+	// Method 1
+	public static void method(int i) {
+		System.out.println("Method 1");
+	}
+	// Method 2
+	public static void method(Short s) {
+		System.out.println("Method 2");
+	}
+	// Method 3
+	public static void method(Long l) {
+		System.out.println("Method 3");
+	}
+	// Method 4
+	public static void method(Integer x, long y) {
+		System.out.println("Method 4");
+	}
+	// Method 5
+	public static void method(int x, long y) {
+		System.out.println("Method 5");
+	}
+	/*
+	 * VarArgs: Must be the last parameter of a method.
+	 * 			There can be only one vararg parameter in a method
+	 * 			You can pass an array into varargs
+	 * 			You can pass any number of nonarray arguments into varargs
+	 */
+	// Method 6
+	public static void method(int i, int...x) {
+		System.out.println("parameters: "+i+", "+java.util.Arrays.toString(x));
+	}
 	// Takes in a String representation of an integer value and returns an integer
 	// value.
 	public static int parseInt(String string) {
