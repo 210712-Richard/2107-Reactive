@@ -29,12 +29,21 @@ public class Primitives {
 		//literalValues();
 		//implicitCasting();
 		//objectsVsPrimitives();
-		System.out.println(parseInt("-234"));
+		//System.out.println(parseInt("-234"));
+		
+		System.out.println(parseInt("abc"));
+		
 	}
 	
 	// Takes in a String representation of an integer value and returns an integer value.
 	public static int parseInt(String string) {
-		return 0;
+		String s = "";
+		for (int i=0;i<string.length(); i++) {
+			int x = string.charAt(i) - 96;
+			//System.out.println(x);
+			s = s + x;
+		}
+		return Integer.parseInt(s);
 	}
 	
 	private static void objectsVsPrimitives() {
