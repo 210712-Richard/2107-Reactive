@@ -3,7 +3,9 @@ package com.revature.list;
 public class Driver {
 
 	public static void main(String[] args) {
-		LinkedList<Integer> list = new LinkedList<Integer>();
+		List<Integer> list = new ArrayList<Integer>();//new LinkedList<Integer>();
+		
+		
 		System.out.println(list);
 		list.add(5);
 		System.out.println(list);
@@ -36,6 +38,7 @@ public class Driver {
 		Integer myItem = list.get(2);
 		System.out.println(myItem);
 		System.out.println(list.remove(myItem));
+		System.out.println(list.remove((Integer) 5));
 		System.out.println(list);
 	}
 
