@@ -55,3 +55,5 @@ We also have a local repository on our own computers that store these artifacts 
 * Group Id: Package name
 * Artifact Id: Project name
 * Finish
+
+Push this change.
