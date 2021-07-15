@@ -47,3 +47,5 @@ A programming paradigm.
   * The idea that an entity can restrict access to its properties from other entities.
 
 ### Functional Programming
+
+I only want to push the other files.
