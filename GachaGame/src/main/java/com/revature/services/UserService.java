@@ -8,7 +8,7 @@ import com.revature.data.UserDAO;
 
 public class UserService {
 	
-	private UserDAO ud = new UserDAO();
+	public UserDAO ud = new UserDAO();
 	
 	public User login(String name) {
 		User u = ud.getUser(name);
@@ -18,6 +18,16 @@ public class UserService {
 	public void doCheckIn(User user) {
 		user.setLastCheckIn(LocalDate.now());
 		user.setCurrency(user.getCurrency() + GachaObject.DAILY_BONUS);
+		ud.writeToFile();
+	}
+	
+	public void register(String username, String email, LocalDate birthday) {
+		User u = new User();
+		u.setCurrency(1000l);
+		u.setUsername(username);
+		u.setEmail(email);
+		u.setBirthday(birthday);
+		ud.addUser(u);
 		ud.writeToFile();
 	}
 	

@@ -46,6 +46,17 @@ A programming paradigm.
 * Encapsulation
   * The idea that an entity can restrict access to its properties from other entities.
 
+##### Access Modifiers
+1. public - Anything can see this.
+2. protected - All children and things in the same package can see this.
+3. (no modifier) - things in the same package can see this
+4. private - only visible within the class.
+
+##### Inheritance vs Composition
+Inheritance is the idea that something *is* something else. A dog IS an animal.
+Composition is the concept of one entity containing another entity. A Dog HAS a name.
+A Bicycle having two Wheel objects is an example of COMPOSITION.
+A Bicycle inheriting the MovableObject Interface is an example of INHERITANCE.
+
 ### Functional Programming
 
-I only want to push the other files.
