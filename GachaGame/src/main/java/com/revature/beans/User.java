@@ -20,6 +20,7 @@ public class User implements Serializable {
 		super();
 		this.type = UserType.PLAYER;
 		this.lastCheckIn = LocalDate.of(2021, 1, 1);
+		this.currency = 0l;
 	}
 	
 	public User(Integer id, String username, String email, LocalDate birthday, Long currency) {

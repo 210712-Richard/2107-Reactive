@@ -30,6 +30,9 @@ public class UserDAO {
 			ds.writeObjectsToFile(users, filename);
 		}
 	}
+	public void addUser(User u) {
+		
+	}
 	
 	public User getUser(String username) {
 		
