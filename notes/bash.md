@@ -5,7 +5,7 @@ Linux, Mac, Unix
 
 ## Definitions
 * *.* - This directory
-* *..* - The Parent of this directory
+* *..* - The Parent of this directory 
 
 ## Commands
 * `ls` - List Directory - Shows you all the files in the current directory.

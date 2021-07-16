@@ -2,6 +2,9 @@ package com.revature.menu;
 
 import java.util.Scanner;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.revature.beans.GachaObject;
 import com.revature.beans.User;
 import com.revature.services.UserService;
@@ -9,27 +12,32 @@ import com.revature.util.SingletonScanner;
 
 // Encapsulate the user interface methods
 public class Menu {
+
+	private static final Logger log = LogManager.getLogger(Menu.class);
+	
 	private UserService us = new UserService();
 	private User loggedUser = null;
 	private Scanner scan = SingletonScanner.getScanner().getScan();
 	
 	public void start() {
-		
+		log.trace("Begin the GachaGame application. start()");
 		mainLoop: while(true) {
 			switch(startMenu()) {
 			case 1:
 				// login
 				System.out.println("Please enter your username: ");
 				String username = scan.nextLine();
+				log.debug(username);
 				// Call the user service to find the user we want.
 				User u = us.login(username);
 				if(u == null) {
+					log.warn("Unsuccessful login attempt: "+ username);
 					System.out.println("Please try again.");
 				} else {
 					loggedUser = u;
 					System.out.println("Welcome back: "+u.getUsername());
 					// call our next method (either the Player menu or the Admin menu, depending on user)
-					
+					log.info("Successful login for user: "+loggedUser);
 					switch(loggedUser.getType()) {
 					case PLAYER:
 						player();
@@ -52,19 +60,23 @@ public class Menu {
 				System.out.println("Not a valid selection, please try again.");
 			}
 		}
+		log.trace("Ending start()");
 	}
 	
 	private int startMenu() {
-		//log
+		log.trace("called startMenu()");
 		System.out.println("Welcome to HistoryCats!");
 		System.out.println("What would you like to do?");
 		System.out.println("\t1. Login");
 		System.out.println("\t2. Register");
 		System.out.println("\t3. Quit");
-		return select();
+		int selection = select();
+		log.trace("Start menu returning selection: "+selection);
+		return selection;
 	}
 	
 	private void player() {
+		log.trace("called player()");
 		player: while(true) {
 			switch(playerMenu()) {
 			case 1:
