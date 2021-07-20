@@ -31,18 +31,27 @@ public class UserDAO {
 		}
 	}
 	public void addUser(User u) {
-		
+		u.setId(users.size());
+		users.add(u);
+	}
+	
+	public List<User> getUsers(){
+		return users;
 	}
 	
 	public User getUser(String username) {
 		
-		for(User user : users) {
-			if(user.getUsername().equals(username)) {
-				return user;
-			}
-		}
-		
-		return null;
+//		for(User user : users) {
+//			if(user.getUsername().equals(username)) {
+//				return user;
+//			}
+//		}
+//		
+//		return null;
+		return users.stream()
+			.filter((u) -> u.getUsername().equals(username))
+			.findFirst()
+			.orElse(null);
 	}
 	
 	public void updateUser(User user) {
