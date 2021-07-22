@@ -49,4 +49,43 @@ public class UserController {
 		// otherwise we're golden
 		ctx.json(loggedUser.getCurrency());
 	}
+	
+	public void logout(Context ctx) {
+		ctx.req.getSession().invalidate();
+		ctx.status(204);
+	}
+	
+	public void dailyCheckIn(Context ctx) {
+		// if we aren't logged in, how can we check in?
+		User loggedUser = ctx.sessionAttribute("loggedUser");
+		log.trace("daily check in to "+loggedUser);
+		String username = ctx.pathParam("username");
+		if(loggedUser == null || !loggedUser.getUsername().equals(username)) {
+			ctx.status(403);
+			return;
+		}
+		if(us.hasCheckedIn(loggedUser)) {
+			// if we have already checked in, we can't check in again
+			ctx.status(429);
+			ctx.html("Already checked in today.");
+			// if we don't return here, then the 204 below will override the 429 above.
+			return;
+		}
+		us.doCheckIn(loggedUser);
+		ctx.status(204);
+	}
+	
+	public void register(Context ctx) {
+		User u = ctx.bodyAsClass(User.class);
+
+		if(us.checkAvailability(u.getUsername())) {
+			User newUser = us.register(u.getUsername(), u.getEmail(), u.getBirthday());
+			ctx.status(201);
+			ctx.json(newUser);
+		} else {
+			ctx.status(409);
+			ctx.html("Username already taken.");
+		}
+		
+	}
 }

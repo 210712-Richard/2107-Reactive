@@ -11,6 +11,8 @@ public class Driver {
 		
 		UserController uc = new UserController();
 		
+		
+		
 		// Javalin has created a web server for us and we have
 		// to tell Javalin how to handle the requests it receives.
 		
@@ -23,8 +25,16 @@ public class Driver {
 		app.get("/", (ctx)->ctx.html("Hello World"));
 		
 		// object::method <- Reference to a method as a function we can pass to a method
-		app.post("/users", uc::login);
 		
+		// As a user, I can log in.
+		app.post("/users", uc::login);
+		// As a user, I can register for a player account.
+		app.put("/users/:username", uc::register);
+		// As a user, I can log out.
+		app.delete("/users", uc::logout);
+		// As a player, I can obtain currency.
+		app.put("/users/:username/lastCheckIn", uc::dailyCheckIn);
+		// As a player, I can view my currency.
 		app.get("/users/:username/currency", uc::getCurrency);
 	}
 }

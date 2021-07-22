@@ -25,7 +25,7 @@ public class UserService {
 		ud.writeToFile();
 	}
 	
-	public void register(String username, String email, LocalDate birthday) {
+	public User register(String username, String email, LocalDate birthday) {
 		User u = new User();
 		u.setCurrency(1000l);
 		u.setUsername(username);
@@ -33,6 +33,7 @@ public class UserService {
 		u.setBirthday(birthday);
 		ud.addUser(u);
 		ud.writeToFile();
+		return u;
 	}
 	
 	public boolean hasCheckedIn(User user) {
