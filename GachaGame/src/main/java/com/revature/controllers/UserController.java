@@ -3,6 +3,7 @@ package com.revature.controllers;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import com.revature.beans.GachaObject;
 import com.revature.beans.User;
 import com.revature.services.UserService;
 
@@ -85,6 +86,23 @@ public class UserController {
 		} else {
 			ctx.status(409);
 			ctx.html("Username already taken.");
+		}
+		
+	}
+	
+	public void summon(Context ctx) {
+		// if we aren't logged in, how can we summon?
+		User loggedUser = ctx.sessionAttribute("loggedUser");
+		String username = ctx.pathParam("username");
+		if(loggedUser == null || !loggedUser.getUsername().equals(username)) {
+			ctx.status(403);
+			return;
+		}
+		GachaObject summoned = us.summon(loggedUser);
+		if(summoned == null) {
+			ctx.status(402);
+		} else {
+			ctx.json(summoned);
 		}
 		
 	}

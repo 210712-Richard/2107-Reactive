@@ -1,17 +1,26 @@
 package com.revature;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.revature.beans.UserType;
 import com.revature.controllers.UserController;
 
 import io.javalin.Javalin;
+import io.javalin.plugin.json.JavalinJackson;
 
 public class Driver {
 	public static void main(String[] args) {
+		// Set up Jackson to serialize LocalDates and LocalDateTimes
+		ObjectMapper jackson = new ObjectMapper();
+		jackson.registerModule(new JavaTimeModule());
+		jackson.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+		JavalinJackson.configure(jackson);
+		
 		// Starts the Javalin Framework
 		Javalin app = Javalin.create().start(8080);
 		
 		UserController uc = new UserController();
-		
-		
 		
 		// Javalin has created a web server for us and we have
 		// to tell Javalin how to handle the requests it receives.
@@ -36,5 +45,8 @@ public class Driver {
 		app.put("/users/:username/lastCheckIn", uc::dailyCheckIn);
 		// As a player, I can view my currency.
 		app.get("/users/:username/currency", uc::getCurrency);
+		
+		// As a player, I can summon a hero
+		app.post("/users/:username/inventory", uc::summon);
 	}
 }
