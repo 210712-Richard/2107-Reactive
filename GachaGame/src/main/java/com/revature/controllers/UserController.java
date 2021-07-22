@@ -118,6 +118,17 @@ public class UserController {
 	
 	// Group 2 - branch: view-gacha
 	public void viewGachas(Context ctx) {
-		// TODO: send back the loggedin User's inventory.
+		
+		
+		//Check that the user is logged in
+		User loggedUser = ctx.sessionAttribute("loggedUser");
+		String username = ctx.pathParam("username");
+		if(loggedUser == null || !loggedUser.getUsername().equals(username)) {
+			ctx.status(403);
+			return;
+		}
+		
+		// send back the loggedin User's inventory.
+		ctx.json(loggedUser.getInventory());
 	}
 }
