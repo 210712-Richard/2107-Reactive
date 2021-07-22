@@ -5,6 +5,7 @@ import org.apache.logging.log4j.Logger;
 
 import com.revature.beans.GachaObject;
 import com.revature.beans.User;
+import com.revature.data.GachaDAO;
 import com.revature.services.UserService;
 
 import io.javalin.http.Context;
@@ -12,6 +13,7 @@ import io.javalin.http.Context;
 public class UserController {
 	private static Logger log = LogManager.getLogger(UserController.class);
 	private UserService us = new UserService();
+	private GachaDAO gachaDAO = new GachaDAO();
 	
 	public void login(Context ctx) {
 		log.trace("Login method called");
@@ -114,6 +116,20 @@ public class UserController {
 		// TODO: Remove the gacha specified in the body of the request from the inventory
 		
 		// TODO: Send back the newly leveled up gacha
+		
+		User loggedUser = ctx.sessionAttribute("loggedUser");
+		String username = ctx.pathParam("username");
+		if(loggedUser == null || !loggedUser.getUsername().equals(username)) {
+			ctx.status(403);
+			return;
+		}
+		GachaObject predator = gachaDAO.getGachaByName(ctx.pathParam("predator"));
+		GachaObject food = gachaDAO.getGachaByName(ctx.pathParam("food"));
+		
+		// Want to read the URN to find the specific gachas that we want 
+		// to level/use for food
+		
+		us.levelGacha(loggedUser, predator, food);
 	}
 	
 	// Group 2 - branch: view-gacha
