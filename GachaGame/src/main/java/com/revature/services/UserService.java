@@ -73,6 +73,8 @@ public class UserService {
 	// level up a gacha that a user owns
 	public void levelGacha(User user, GachaObject predator, GachaObject food) {
 		predator.levelUp();
+		// verify the food exists
+		// verify the food isn't the predator
 		user.getInventory().remove(food);
 		ud.writeToFile();
 	}

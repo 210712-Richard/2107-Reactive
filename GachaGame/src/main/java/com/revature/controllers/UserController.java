@@ -4,6 +4,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.revature.beans.GachaObject;
+import com.revature.beans.HistoricalCat;
 import com.revature.beans.User;
 import com.revature.data.GachaDAO;
 import com.revature.services.UserService;
@@ -111,25 +112,28 @@ public class UserController {
 	
 	// Group 1 - branch: level-up
 	public void level(Context ctx) {
-		// TODO: Level up the gacha specified in the path parameter
-		
-		// TODO: Remove the gacha specified in the body of the request from the inventory
-		
-		// TODO: Send back the newly leveled up gacha
-		
+		// Level up the gacha specified in the path parameter
 		User loggedUser = ctx.sessionAttribute("loggedUser");
 		String username = ctx.pathParam("username");
 		if(loggedUser == null || !loggedUser.getUsername().equals(username)) {
 			ctx.status(403);
 			return;
 		}
-		GachaObject predator = gachaDAO.getGachaByName(ctx.pathParam("predator"));
-		GachaObject food = gachaDAO.getGachaByName(ctx.pathParam("food"));
-		
-		// Want to read the URN to find the specific gachas that we want 
-		// to level/use for food
+		Integer predatorId = Integer.parseInt(ctx.pathParam("gachaId"));
+		GachaObject predator = loggedUser.getInventory()
+			.stream()
+			.filter((gacha)->gacha.getId().equals(predatorId))
+			.findFirst()
+			.orElse(null);
+		if(predator == null) {
+			ctx.status(404); // Couldn't find the predator
+			return;
+		}
+		GachaObject food = ctx.bodyAsClass(HistoricalCat.class);
 		
 		us.levelGacha(loggedUser, predator, food);
+		
+		ctx.json(predator);
 	}
 	
 	// Group 2 - branch: view-gacha
