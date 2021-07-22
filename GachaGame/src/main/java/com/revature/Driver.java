@@ -54,6 +54,6 @@ public class Driver {
 		app.put("/users/:username/inventory/:gachaId", uc::level);
 		
 		// As a player, I can view my gachas
-		app.get("/users/:username/inventory", gachaController::viewGachas);
+		app.get("/users/:username/inventory", uc::viewGachas);
 	}
 }
