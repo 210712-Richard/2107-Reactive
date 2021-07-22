@@ -60,3 +60,30 @@ A Bicycle inheriting the MovableObject Interface is an example of INHERITANCE.
 
 ### Functional Programming
 
+A programming paradigm in which we write functions (without internal state) to manipulate data to solve a problem.
+
+* *Pure functions*: A function that produces the same output for the same arguments no matter how many time you call it, and has no side-effects. A pure function should not modify any of the arguments it has been given, instead creating copies and manipulating those copies.
+
+#### Functions vs Methods
+
+A function exists as a first-class object. It is a piece of execution that we can use as parameters to other functions, returned from a functoin, and stored in data structures.
+
+A method on the other hand is part of an object that can be called when you have access to that object.
+
+#### Functions in Java
+
+Java 8 introduced the `java.util.function` package which contains a number of Functional Interfaces
+
+A *Functional Interface* is an interface containing only a single abstract method that can be instantiated as a Function.
+
+To implement a Functional Interface as a function in Java, we create a `Lambda`.
+
+##### Lambdas
+
+`(parameters) -> returnValue`
+
+```Java
+(parameters) -> {
+  // implementation
+}
+```

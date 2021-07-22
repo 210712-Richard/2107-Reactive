@@ -2,7 +2,6 @@ package com.revature.beans;
 
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 public class User implements Serializable {
@@ -22,7 +21,6 @@ public class User implements Serializable {
 		this.type = UserType.PLAYER;
 		this.lastCheckIn = LocalDate.of(2021, 1, 1);
 		this.currency = 0l;
-		this.inventory = new ArrayList<GachaObject>();
 	}
 	
 	public User(Integer id, String username, String email, LocalDate birthday, Long currency) {
@@ -71,9 +69,6 @@ public class User implements Serializable {
 		this.currency = currency;
 	}
 	public List<GachaObject> getInventory() {
-		if(inventory ==  null) {
-			inventory = new ArrayList<GachaObject>();
-		}
 		return inventory;
 	}
 	public void setInventory(List<GachaObject> inventory) {

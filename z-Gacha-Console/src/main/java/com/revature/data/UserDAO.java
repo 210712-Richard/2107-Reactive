@@ -5,7 +5,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.revature.beans.GachaObject;
 import com.revature.beans.User;
 import com.revature.beans.UserType;
 

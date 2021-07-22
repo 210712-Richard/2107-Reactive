@@ -1,6 +1,10 @@
 package com.revature.menu;
 
+import java.time.LocalDate;
+import java.util.List;
 import java.util.Scanner;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -49,7 +53,25 @@ public class Menu {
 				}
 				break;
 			case 2:
-				// register
+				System.out.println("Choose your username: ");
+				String newName = scan.nextLine();
+				if(!us.checkAvailability(newName)) {
+					System.out.println("Username not available, please try again.");
+					continue mainLoop;
+				}
+				System.out.println("Enter your email address: ");
+				String email = scan.nextLine();
+				System.out.println("enter your birthday (YYYY/MM/DD): ");
+				List<Integer> bday = Stream.of(scan.nextLine().split("/"))
+						.map((str)->Integer.parseInt(str)).collect(Collectors.toList());
+				
+				LocalDate birth = LocalDate.of(bday.get(0), bday.get(1), bday.get(2));
+				if(!us.checkBirthday(birth)) {
+					System.out.println("Not old enough, please try again when you are older.");
+					continue mainLoop;
+				}
+				System.out.println("Registering...");
+				us.register(newName, email, birth);
 				break;
 			case 3:
 				// quit
