@@ -22,6 +22,14 @@ public class Primitives {
 	 */
 
 	public static void main(String[] args) {
+		//values();
+		//convertibleIntTypes();
+		//literalValues();
+		//implicitCasting();
+		//objectsVsPrimitives();
+		//System.out.println(parseInt("-234"));
+		
+		
 		// values();
 		// convertibleIntTypes();
 		// literalValues();
@@ -47,6 +55,7 @@ public class Primitives {
 	 * 4. VarArgs: 
 	 */
 	
+		
 	private static void overloading() {
 		int intPrimitive = 5;
 		Integer intObject = 5;
