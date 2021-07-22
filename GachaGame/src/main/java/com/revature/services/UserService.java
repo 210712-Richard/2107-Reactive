@@ -72,6 +72,10 @@ public class UserService {
 	
 	// level up a gacha that a user owns
 	public void levelGacha(User user, GachaObject predator, GachaObject food) {
+		// make sure the predator isn't max level
+		if(GachaObject.MAXIMUM_LEVEL.equals(predator.getLevel())){
+			return;
+		}
 		predator.levelUp();
 		// verify the food exists
 		// verify the food isn't the predator

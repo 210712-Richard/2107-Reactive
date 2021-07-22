@@ -5,9 +5,13 @@ import java.io.Serializable;
 public class Ability implements Serializable {
 	
 	private String abilityName;
+	
+	public Ability() {
+		super();
+	}
 
-	public Ability(String name) {
-		this.abilityName = name;
+	public Ability(String abilityName) {
+		this.abilityName = abilityName;
 	}
 
 	@Override

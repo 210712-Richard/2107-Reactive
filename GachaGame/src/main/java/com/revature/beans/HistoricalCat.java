@@ -20,6 +20,7 @@ public class HistoricalCat implements GachaObject {
 	}
 	@Override
 	public void levelUp() {
+		this.level++;
 		this.stats.setAttack((int) Math.ceil(this.stats.getAttack() * 1.2));
 		this.stats.setDefense((int) Math.ceil(this.stats.getDefense() * 1.2));
 		this.stats.setHealth((int) Math.ceil(this.stats.getHealth() * 1.2));

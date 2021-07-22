@@ -119,7 +119,7 @@ public class UserController {
 			ctx.status(403);
 			return;
 		}
-		Integer predatorId = Integer.parseInt(ctx.pathParam("gachaId"));
+		Long predatorId = Long.parseLong(ctx.pathParam("gachaId"));
 		GachaObject predator = loggedUser.getInventory()
 			.stream()
 			.filter((gacha)->gacha.getId().equals(predatorId))
