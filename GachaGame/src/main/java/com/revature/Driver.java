@@ -3,7 +3,7 @@ package com.revature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.revature.beans.UserType;
+import com.revature.controllers.GachaController;
 import com.revature.controllers.UserController;
 
 import io.javalin.Javalin;
@@ -21,6 +21,7 @@ public class Driver {
 		Javalin app = Javalin.create().start(8080);
 		
 		UserController uc = new UserController();
+		GachaController gachaController = new GachaController();
 		
 		// Javalin has created a web server for us and we have
 		// to tell Javalin how to handle the requests it receives.
@@ -48,5 +49,11 @@ public class Driver {
 		
 		// As a player, I can summon a hero
 		app.post("/users/:username/inventory", uc::summon);
+		
+		// As a player, I can level up my gacha
+		app.put("/users/:username/inventory/:gachaId", uc::level);
+		
+		// As a player, I can view my gachas
+		app.get("/users/:username/inventory", gachaController::viewGachas);
 	}
 }

@@ -7,7 +7,7 @@ public interface GachaObject extends Serializable{
 	Long DAILY_BONUS = 500l;
 	Long SUMMON_COST = 100l;
 	
-	void levelUp(GachaObject object);
+	void levelUp();
 	
 	Long getId();
 	void setId(Long id);

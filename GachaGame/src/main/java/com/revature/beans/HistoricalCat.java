@@ -19,8 +19,10 @@ public class HistoricalCat implements GachaObject {
 		this.type = type;
 	}
 	@Override
-	public void levelUp(GachaObject object) {
-		
+	public void levelUp() {
+		this.stats.setAttack((int) Math.ceil(this.stats.getAttack() * 1.2));
+		this.stats.setDefense((int) Math.ceil(this.stats.getDefense() * 1.2));
+		this.stats.setHealth((int) Math.ceil(this.stats.getHealth() * 1.2));
 	}
 	public Long getId() {
 		return id;

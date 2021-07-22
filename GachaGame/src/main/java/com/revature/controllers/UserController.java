@@ -106,4 +106,18 @@ public class UserController {
 		}
 		
 	}
+	
+	// Group 1 - branch: level-up
+	public void level(Context ctx) {
+		// TODO: Level up the gacha specified in the path parameter
+		
+		// TODO: Remove the gacha specified in the body of the request from the inventory
+		
+		// TODO: Send back the newly leveled up gacha
+	}
+	
+	// Group 2 - branch: view-gacha
+	public void viewGachas(Context ctx) {
+		// TODO: send back the loggedin User's inventory.
+	}
 }

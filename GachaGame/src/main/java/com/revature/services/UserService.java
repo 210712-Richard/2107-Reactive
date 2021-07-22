@@ -71,6 +71,11 @@ public class UserService {
 	}
 	
 	// level up a gacha that a user owns
+	public void levelGacha(User user, GachaObject predator, GachaObject food) {
+		predator.levelUp();
+		user.getInventory().remove(food);
+		ud.writeToFile();
+	}
 	
 	// summon a gacha
 	public GachaObject summon(User summoner) {
@@ -89,6 +94,7 @@ public class UserService {
 		// 4. Update the user's currency
 		summoner.setCurrency(summoner.getCurrency() - GachaObject.SUMMON_COST);
 		// 5. Add the object to the inventory
+		summonedObject.setId((long) summoner.getInventory().size());
 		summoner.getInventory().add(summonedObject);
 		// 6. Saving
 		ud.writeToFile();
