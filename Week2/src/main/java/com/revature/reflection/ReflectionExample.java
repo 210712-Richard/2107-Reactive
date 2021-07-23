@@ -103,6 +103,8 @@ public class ReflectionExample {
 }
 
 
+
+
 class Bean implements Serializable {	
 	private Integer id; // only something in the same class can access this member.
 	private String strain;
