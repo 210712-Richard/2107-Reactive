@@ -21,7 +21,7 @@ import com.revature.beans.UserType;
 import com.revature.data.UserDAO;
 
 public class UserServiceTest {
-	private static UserService service;
+	private static UserServiceImpl service;
 	private static User u;
 	
 	@BeforeAll // Specifies that this static method will be run before any tests
@@ -32,7 +32,7 @@ public class UserServiceTest {
 	
 	@BeforeEach // Specifies a method that is to be run before each test
 	public void setUpTests() {
-		service = new UserService(); // create a new userService for every test to maximize isolation
+		service = new UserServiceImpl(); // create a new userService for every test to maximize isolation
 		u.setLastCheckIn(LocalDate.of(2021, 1,1));
 		u.setCurrency(500l);
 		service.ud = Mockito.mock(UserDAO.class);
@@ -52,7 +52,7 @@ public class UserServiceTest {
 		Mockito.verify(service.ud).addUser(captor.capture());
 
 		// ud.writeToFile() was called.
-		Mockito.verify(service.ud).writeToFile();
+		//Mockito.verify(service.ud).writeToFile();
 		
 		// A user is created with the given arguments
 		// That user is of type Player
@@ -79,7 +79,7 @@ public class UserServiceTest {
 		assertEquals(startingCurrency + GachaObject.DAILY_BONUS, u.getCurrency(), "Asserting that currency is correct");
 
 		// 3. writeToFile was called.
-		Mockito.verify(service.ud).writeToFile();
+		//Mockito.verify(service.ud).writeToFile();
 		
 	}
 

@@ -4,7 +4,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.revature.controllers.GachaController;
+import com.revature.controllers.GachaControllerImpl;
 import com.revature.controllers.UserController;
+import com.revature.controllers.UserControllerImpl;
+import com.revature.factory.BeanFactory;
 
 import io.javalin.Javalin;
 import io.javalin.plugin.json.JavalinJackson;
@@ -20,8 +23,8 @@ public class Driver {
 		// Starts the Javalin Framework
 		Javalin app = Javalin.create().start(8080);
 		
-		UserController uc = new UserController();
-		GachaController gachaController = new GachaController();
+		UserController uc = (UserController) BeanFactory.getFactory().get(UserController.class, UserControllerImpl.class);
+		GachaController gachaController = (GachaController) BeanFactory.getFactory().get(GachaController.class, GachaControllerImpl.class);
 		
 		// Javalin has created a web server for us and we have
 		// to tell Javalin how to handle the requests it receives.

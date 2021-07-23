@@ -12,6 +12,7 @@ public class DataSerializer<T> {
 		
 	// Generic Type - Replace all instances of an object type with a variable type T
 
+	@SuppressWarnings("unchecked")
 	public List<T> readObjectsFromFile(String filename) {
 		List<T> objects = null;
 		try(ObjectInputStream o = new ObjectInputStream(new FileInputStream(filename));){

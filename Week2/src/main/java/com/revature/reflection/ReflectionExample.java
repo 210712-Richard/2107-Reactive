@@ -13,7 +13,14 @@ public class ReflectionExample {
 	public static void main(String[] args) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
 		//System.out.println(System.class);
 		//beans();
-		string();
+		//string();
+		factory();
+	}
+
+	private static void factory() {
+		BeanFactory bf = new BeanFactory();
+		Bean b = bf.build();
+		System.out.println(b);
 	}
 
 	private static void string() throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
@@ -103,7 +110,28 @@ public class ReflectionExample {
 }
 
 
-
+class BeanFactory {
+	public Bean build() {
+		try {
+			// Use Reflection to build a bean
+			Constructor<Bean> c = (Constructor<Bean>) Bean.class.getConstructor();
+			System.out.println(c);
+			// invoke the constructor
+			Bean b = c.newInstance();
+			System.out.println(b);
+			// also initialize aspects of our bean
+			Method m = Bean.class.getDeclaredMethod("setColor", String.class);
+			m.invoke(b, "red");
+			
+			Bean.class.getDeclaredMethod("setStrain", String.class).invoke(b, "pinto");
+			
+			return b;
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+}
 
 class Bean implements Serializable {	
 	private Integer id; // only something in the same class can access this member.

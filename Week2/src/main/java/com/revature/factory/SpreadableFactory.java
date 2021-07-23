@@ -4,7 +4,14 @@ public class SpreadableFactory {
 	// A Factory is an object that can return an instance of an interface
 	// so we can abstract the usage of that object away from it's implementation
 	public Spreadable getSpreadable() {
-		return new Cheese();
+		return new Jam();
+	}
+	
+	public Spreadable getSpreadable(String type) {
+		switch(type) {
+		case "Cheese": return new Cheese();
+		default: return new Jam();
+		}
 	}
 
 	public static void main(String[] args) {
@@ -12,6 +19,7 @@ public class SpreadableFactory {
 		Spreadable spread = factory.getSpreadable();
 		// I have toast and wish to spread something on it.
 		spread.spread();
+		factory.getSpreadable("Cheese").spread();
 	}
 
 }
