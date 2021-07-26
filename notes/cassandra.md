@@ -199,3 +199,9 @@ a
 4. `keytool -import -alias cassandra -keystore cassandra_truststore.jks -file temp_file.der`
    1. Highly suggest the password: `p4ssw0rd`
    2. say yes when it asks.
+
+### Create our Keyspace
+1. Go to Amazon Keyspaces
+2. `Create Keyspace`
+3. Give it a name
+4. `Create Keyspace`

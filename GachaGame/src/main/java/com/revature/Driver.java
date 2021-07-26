@@ -8,12 +8,27 @@ import com.revature.controllers.GachaControllerImpl;
 import com.revature.controllers.UserController;
 import com.revature.controllers.UserControllerImpl;
 import com.revature.factory.BeanFactory;
+import com.revature.util.CassandraUtil;
 
 import io.javalin.Javalin;
 import io.javalin.plugin.json.JavalinJackson;
 
 public class Driver {
 	public static void main(String[] args) {
+		dbtest(); // create a table
+		//javalin();
+	}
+	
+	private static void dbtest() {
+		
+		StringBuilder sb = new StringBuilder("CREATE TABLE IF NOT EXISTS User (")
+				.append("username text PRIMARY KEY, type text, id int, currency varint, ")
+				.append("birthday date, lastCheckIn date, email text, inventory list<int> );");
+		CassandraUtil.getInstance().getSession().execute(sb.toString());
+	}
+
+	public static void javalin() {
+		
 		// Set up Jackson to serialize LocalDates and LocalDateTimes
 		ObjectMapper jackson = new ObjectMapper();
 		jackson.registerModule(new JavaTimeModule());
