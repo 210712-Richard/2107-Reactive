@@ -2,3 +2,6 @@
 .settings
 .classpath
 .project
+**/cassandra_truststore.jks
+**/sf-class2-root.crt
+**/temp_file.der
