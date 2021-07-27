@@ -8,6 +8,7 @@ import java.util.List;
 public class User implements Serializable {
 	// literally only created the UID to get rid of the warning, and it doesn't matter at all.
 	private static final long serialVersionUID = -6426075925303078798L;
+	private Integer id;
 	private String username;
 	private String email;
 	private LocalDate birthday;
@@ -24,14 +25,21 @@ public class User implements Serializable {
 		this.inventory = new ArrayList<GachaObject>();
 	}
 	
-	public User(String username, String email, LocalDate birthday, Long currency) {
+	public User(Integer id, String username, String email, LocalDate birthday, Long currency) {
 		this();
+		this.id = id;
 		this.username = username;
 		this.email = email;
 		this.birthday = birthday;
 		this.currency = currency;
 	}
 
+	public Integer getId() {
+		return id;
+	}
+	public void setId(Integer id) {
+		this.id = id;
+	}
 	public String getUsername() {
 		return username;
 	}
@@ -79,6 +87,7 @@ public class User implements Serializable {
 		result = prime * result + ((birthday == null) ? 0 : birthday.hashCode());
 		result = prime * result + ((currency == null) ? 0 : currency.hashCode());
 		result = prime * result + ((email == null) ? 0 : email.hashCode());
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		result = prime * result + ((inventory == null) ? 0 : inventory.hashCode());
 		result = prime * result + ((lastCheckIn == null) ? 0 : lastCheckIn.hashCode());
 		result = prime * result + ((type == null) ? 0 : type.hashCode());
@@ -110,6 +119,11 @@ public class User implements Serializable {
 				return false;
 		} else if (!email.equals(other.email))
 			return false;
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
+			return false;
 		if (inventory == null) {
 			if (other.inventory != null)
 				return false;
@@ -132,7 +146,7 @@ public class User implements Serializable {
 
 	@Override
 	public String toString() {
-		return "User [username=" + username + ", email=" + email + ", birthday=" + birthday + ", type="
+		return "User [id=" + id + ", username=" + username + ", email=" + email + ", birthday=" + birthday + ", type="
 				+ type + ", currency=" + currency + ", lastCheckIn=" + lastCheckIn + ", inventory=" + inventory + "]";
 	}
 

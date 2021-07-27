@@ -12,18 +12,18 @@ import org.apache.logging.log4j.Logger;
 import com.revature.beans.GachaObject;
 import com.revature.beans.Rarity;
 import com.revature.beans.User;
-import com.revature.data.GachaDao;
-import com.revature.data.GachaDaoImpl;
-import com.revature.data.UserDao;
-import com.revature.data.UserDaoImpl;
+import com.revature.data.GachaDAO;
+import com.revature.data.GachaDAOFile;
+import com.revature.data.UserDAO;
+import com.revature.data.UserDAOFile;
 import com.revature.factory.BeanFactory;
 import com.revature.factory.Log;
 
 @Log
 public class UserServiceImpl implements UserService {
 	private Logger log = LogManager.getLogger(UserServiceImpl.class);
-	public UserDao ud = (UserDao) BeanFactory.getFactory().get(UserDao.class, UserDaoImpl.class);
-	public GachaDao gachaDao = (GachaDao) BeanFactory.getFactory().get(GachaDao.class, GachaDaoImpl.class);
+	public UserDAO ud = (UserDAO) BeanFactory.getFactory().get(UserDAO.class, UserDAOFile.class);
+	public GachaDAO gachaDao = (GachaDAO) BeanFactory.getFactory().get(GachaDAO.class, GachaDAOFile.class);
 	private Random r = new Random();
 	
 	@Override
@@ -36,6 +36,7 @@ public class UserServiceImpl implements UserService {
 	public void doCheckIn(User user) {
 		user.setLastCheckIn(LocalDate.now());
 		user.setCurrency(user.getCurrency() + GachaObject.DAILY_BONUS);
+		(new UserDAOFile()).writeToFile();
 	}
 	
 	@Override
@@ -46,6 +47,7 @@ public class UserServiceImpl implements UserService {
 		u.setEmail(email);
 		u.setBirthday(birthday);
 		ud.addUser(u);
+		(new UserDAOFile()).writeToFile();
 		return u;
 	}
 	
@@ -90,6 +92,7 @@ public class UserServiceImpl implements UserService {
 		// verify the food exists
 		// verify the food isn't the predator
 		user.getInventory().remove(food);
+		(new UserDAOFile()).writeToFile();
 	}
 	
 	// summon a gacha
@@ -113,6 +116,7 @@ public class UserServiceImpl implements UserService {
 		summonedObject.setId((long) summoner.getInventory().size());
 		summoner.getInventory().add(summonedObject);
 		// 6. Saving
+		(new UserDAOFile()).writeToFile();
 		return summonedObject;
 	}
 

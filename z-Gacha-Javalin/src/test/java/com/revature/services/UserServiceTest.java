@@ -18,7 +18,7 @@ import org.mockito.Mockito;
 import com.revature.beans.GachaObject;
 import com.revature.beans.User;
 import com.revature.beans.UserType;
-import com.revature.data.UserDao;
+import com.revature.data.UserDAO;
 
 public class UserServiceTest {
 	private static UserServiceImpl service;
@@ -35,7 +35,7 @@ public class UserServiceTest {
 		service = new UserServiceImpl(); // create a new userService for every test to maximize isolation
 		u.setLastCheckIn(LocalDate.of(2021, 1,1));
 		u.setCurrency(500l);
-		service.ud = Mockito.mock(UserDao.class);
+		service.ud = Mockito.mock(UserDAO.class);
 	}
 	
 	@Test

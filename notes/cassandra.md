@@ -91,9 +91,63 @@ tweet-id    | Hashtag
 * **Row**: A collection of columns identified by a primary key
 * **Column**: A single piece of data with a type belonging to a row.
 
+### Data Types
 
+* BigInt: Long (64-bit integer value)
+* Blob: Arbitrary bytes (Binary large object)
+* Boolean: true/false
+* Date: with no time
+* Decimal: variable precision decimal, larger than double
+* Double: Double (64-bit decimal value)
+* Float: Float (32-bit decimal value)
+* Int: Integer (32-bit integer value)
+* Text: UTF8 encoded String
+* Time
+* Timestamp
+* uuid: 128bit number
+* varchar: utf8 encoded string
+* varint: BigInteger (arbitrary length int)
 
+Collections:
+* list - an *ordered* group of one or more elements
+* map - an object consisting of key-value pairs
+* set - a group of one or more unique elements
+* tuple - a group of 2-3 items treated as a single item
 
+### Primary Key
+
+A unique identifier for a group of data in a table.
+
+**Candidate Key**: A piece of a group of data (a column or group of columns in a table) that *could* be utilized to identify that group.
+Good Candidate Key:
+* Exists for each group (row) of data.
+* Unique for each group of data.
+* Non-volatile (doesn't change)
+* Non-sensitive
+
+Types of keys:
+* **Natural Key**: A piece of data that arises from the natural dataset. For example: someone's name, someone's ssn, a book's isbn
+* **Surrogate Key**: A piece of data added to the set (generated) in order to serve as the primary key.
+
+### Primary Keys in Cassandra
+A primary key in Cassandra can have two parts. The first part is known as the Partition key and the second part is known as the clustering key. If a Cassandra table only has a single column primary key that it only has a partition key and no clustering key. Otherwise, the first column in a primary key is the partition key and the remaining columns are clustering keys.
+
+#### Partition Key
+The key in charge of partitioning data. Data locality (which partition the data is stored in) is determined by the hashing of the Partition key of the data.
+
+Choosing a partition key with low variance (a lot of data has the same value) might result in clustering in one partiton over the others.
+
+#### Complex Key
+`create table if not exists book (title, author, publisher, genre, primary key (title, author, publisher))`
+Creates a primary key with a Partition key of `title`, a clustering key of `author` and a second clustering key of `publisher`
+
+#### Clustering Key
+A key that orders data within a partition. In our above example, we have partitioned books by title, separating them and are now ordering books based on their author and then their publisher. A query that wanted to get all books by a single author would have to query across multiple partitions but would at least be able to get the author information quickly on each partition.
+
+### Optimizing Queries
+In order to optimize our queries we need to model out tables effectively. We want to spread our data evenly across partitions and we want to minimize the number of partitions we need to query with each query.
+
+If we know that we usually want to retrieve a list of books by author with might consider using it as the partition key instead of title.
 
 ## Using AWS Keyspaces
 ### Set Up Our IAM User
