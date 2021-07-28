@@ -141,6 +141,9 @@ PATCH - update the resource with the parts of the resource included in the PATCH
   * POST to /cats (add a cat to the collection)
   * /cats/1/update-name is VERY BAD
   * PUT to /cats/1 (update cat 1)
+  * PUT to /users/Richard/checking (send an object representation of the checking account with the new balance in it)
+  * /users/Richard/checking/deposit is bad.
+  * /users/CreateNewUser is bad
 * Make your endpoints descriptive
   * /z/3 is bad
   * /cats/3 is good
