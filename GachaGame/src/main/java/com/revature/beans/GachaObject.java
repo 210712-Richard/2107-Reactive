@@ -1,6 +1,7 @@
 package com.revature.beans;
 
 import java.io.Serializable;
+import java.util.UUID;
 
 public interface GachaObject extends Serializable{
 	Integer MAXIMUM_LEVEL = 10;
@@ -9,8 +10,8 @@ public interface GachaObject extends Serializable{
 	
 	void levelUp();
 	
-	Long getId();
-	void setId(Long id);
+	UUID getId();
+	void setId(UUID id);
 	
 	String getName();
 	void setName(String name);
@@ -20,4 +21,10 @@ public interface GachaObject extends Serializable{
 	
 	Integer getLevel();
 	void setLevel(Integer level);
+	
+	Attributes getStats();
+	void setStats(Attributes stats);
+	
+	Ability getAbility();
+	void setAbility(Ability ability);
 }

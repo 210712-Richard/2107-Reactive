@@ -2,6 +2,7 @@ package com.revature.data;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import com.datastax.oss.driver.api.core.CqlSession;
 import com.datastax.oss.driver.api.core.DefaultConsistencyLevel;
@@ -21,30 +22,33 @@ import com.revature.factory.Log;
 import com.revature.util.CassandraUtil;
 
 @Log
-public class GachaDaoImpl implements GachaDao {
+public class OwnedGachaDaoImpl implements OwnedGachaDao {
 	private CqlSession session = CassandraUtil.getInstance().getSession();
 
 	@Override
-	public void addGacha(GachaObject gacha) {
-		String query = "Insert into gacha (rarity, stats, name, ability) values (?, ?, ?, ?);";
+	public UUID addGacha(GachaObject gacha) {
+		String query = "Insert into owned_gacha (id, level, rarity, stats, name, ability) values (?, ?, ?, ?, ?, ?);";
 		TupleValue stats = DataTypes.tupleOf(DataTypes.INT, DataTypes.INT, DataTypes.INT)
 				.newValue(gacha.getStats().getAttack(), gacha.getStats().getDefense(), gacha.getStats().getHealth());
-
+		UUID id = UUID.randomUUID();
 		SimpleStatement s = new SimpleStatementBuilder(query).setConsistencyLevel(DefaultConsistencyLevel.LOCAL_QUORUM)
 				.build();
-		BoundStatement bound = session.prepare(s).bind(gacha.getRarity().toString(), stats, gacha.getName(),
-				gacha.getAbility().toString());
+		BoundStatement bound = session.prepare(s).bind(id, gacha.getLevel(), gacha.getRarity().toString(),
+				stats, gacha.getName(), gacha.getAbility().toString());
 		session.execute(bound);
+		return id;
 	}
 
 	@Override
 	public List<GachaObject> getGachas() {
 		List<GachaObject> gachas = new ArrayList<GachaObject>();
-		String query = "Select rarity, stats, name, ability from gacha";
+		String query = "Select id, level, rarity, stats, name, ability from owned_gacha";
 		ResultSet rs = session.execute(new SimpleStatementBuilder(query).build());
 
 		rs.forEach(row -> {
 			GachaObject g = new HistoricalCat();
+			g.setId(row.getUuid("id"));
+			g.setLevel(row.getInt("level"));
 			g.setAbility(Ability.valueOf(row.getString("ability")));
 			g.setRarity(Rarity.valueOf(row.getString("rarity")));
 			g.setStats(new Attributes(row.getTupleValue("stats").get(0, Integer.class),
@@ -59,7 +63,7 @@ public class GachaDaoImpl implements GachaDao {
 
 	@Override
 	public GachaObject getGachaByName(String name) {
-		String query = "Select rarity, stats, name, ability from gacha where name = ?";
+		String query = "Select id, level, rarity, stats, name, ability from owned_gacha where name = ?";
 		BoundStatement bound = session.prepare(new SimpleStatementBuilder(query).build()).bind(name);
 		ResultSet rs = session.execute(bound);
 
@@ -68,6 +72,8 @@ public class GachaDaoImpl implements GachaDao {
 			return null;
 		}
 		GachaObject g = new HistoricalCat();
+		g.setId(row.getUuid("id"));
+		g.setLevel(row.getInt("level"));
 		g.setAbility(Ability.valueOf(row.getString("ability")));
 		g.setRarity(Rarity.valueOf(row.getString("rarity")));
 		g.setStats(new Attributes(row.getTupleValue("stats").get(0, Integer.class),
@@ -80,12 +86,14 @@ public class GachaDaoImpl implements GachaDao {
 	@Override
 	public List<GachaObject> getGachasByRarity(Rarity rarity) {
 		List<GachaObject> gachas = new ArrayList<GachaObject>();
-		String query = "Select rarity, stats, name, ability from gacha where rarity = ?";
+		String query = "Select id, level, rarity, stats, name, ability from owned_gacha where rarity = ?";
 		BoundStatement bound = session.prepare(new SimpleStatementBuilder(query).build()).bind(rarity.toString());
 		ResultSet rs = session.execute(bound);
 
 		rs.forEach(row -> {
 			GachaObject g = new HistoricalCat();
+			g.setId(row.getUuid("id"));
+			g.setLevel(row.getInt("level"));
 			g.setAbility(Ability.valueOf(row.getString("ability")));
 			g.setRarity(Rarity.valueOf(row.getString("rarity")));
 			g.setStats(new Attributes(row.getTupleValue("stats").get(0, Integer.class),
@@ -100,15 +108,37 @@ public class GachaDaoImpl implements GachaDao {
 
 	@Override
 	public void updateGacha(GachaObject gacha) {
-		String query = "update gacha set stats=?, ability=? where rarity = ? and name = ?;";
+		String query = "updated owned_gacha set level = ?, stats = ?, name = ?, ability = ? where id = ? and rarity = ?;";
 		TupleValue stats = DataTypes.tupleOf(DataTypes.INT, DataTypes.INT, DataTypes.INT)
 				.newValue(gacha.getStats().getAttack(), gacha.getStats().getDefense(), gacha.getStats().getHealth());
 
 		SimpleStatement s = new SimpleStatementBuilder(query).setConsistencyLevel(DefaultConsistencyLevel.LOCAL_QUORUM)
 				.build();
-		BoundStatement bound = session.prepare(s).bind(stats, gacha.getAbility().toString(), gacha.getName(),
-				gacha.getRarity().toString());
+		BoundStatement bound = session.prepare(s).bind(gacha.getLevel(), stats, gacha.getName(),
+				gacha.getAbility().toString(), gacha.getId(), gacha.getRarity().toString());
 		session.execute(bound);
+	}
+
+	@Override
+	public GachaObject getGachaById(UUID id) {
+		String query = "Select id, level, rarity, stats, name, ability from owned_gacha where id = ?";
+		BoundStatement bound = session.prepare(new SimpleStatementBuilder(query).build()).bind(id);
+		ResultSet rs = session.execute(bound);
+
+		Row row = rs.one();
+		if (row == null) {
+			return null;
+		}
+		GachaObject g = new HistoricalCat();
+		g.setId(row.getUuid("id"));
+		g.setLevel(row.getInt("level"));
+		g.setAbility(Ability.valueOf(row.getString("ability")));
+		g.setRarity(Rarity.valueOf(row.getString("rarity")));
+		g.setStats(new Attributes(row.getTupleValue("stats").get(0, Integer.class),
+				row.getTupleValue("stats").get(1, Integer.class), row.getTupleValue("stats").get(2, Integer.class)));
+		g.setName(row.getString("name"));
+
+		return g;
 	}
 
 }

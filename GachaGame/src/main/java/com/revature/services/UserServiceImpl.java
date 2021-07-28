@@ -5,6 +5,9 @@ import java.time.Period;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
+import java.util.UUID;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -14,6 +17,8 @@ import com.revature.beans.Rarity;
 import com.revature.beans.User;
 import com.revature.data.GachaDao;
 import com.revature.data.GachaDaoImpl;
+import com.revature.data.OwnedGachaDao;
+import com.revature.data.OwnedGachaDaoImpl;
 import com.revature.data.UserDao;
 import com.revature.data.UserDaoImpl;
 import com.revature.factory.BeanFactory;
@@ -24,11 +29,19 @@ public class UserServiceImpl implements UserService {
 	private Logger log = LogManager.getLogger(UserServiceImpl.class);
 	public UserDao ud = (UserDao) BeanFactory.getFactory().get(UserDao.class, UserDaoImpl.class);
 	public GachaDao gachaDao = (GachaDao) BeanFactory.getFactory().get(GachaDao.class, GachaDaoImpl.class);
+
+	public OwnedGachaDao ownedGachaDao = (OwnedGachaDao) BeanFactory.getFactory().get(OwnedGachaDao.class, OwnedGachaDaoImpl.class);
 	private Random r = new Random();
 	
 	@Override
 	public User login(String name) {
 		User u = ud.getUser(name);
+		List<UUID> inventoryIds = ud.getUserInventory(name);
+		
+		List<GachaObject> inventory = inventoryIds.stream()
+				.map(id -> ownedGachaDao.getGachaById(id))
+				.collect(Collectors.toList());
+		u.setInventory(inventory);
 		return u;
 	}
 	
@@ -36,6 +49,7 @@ public class UserServiceImpl implements UserService {
 	public void doCheckIn(User user) {
 		user.setLastCheckIn(LocalDate.now());
 		user.setCurrency(user.getCurrency() + GachaObject.DAILY_BONUS);
+		ud.updateUser(user);
 	}
 	
 	@Override
@@ -59,14 +73,8 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public boolean checkAvailability(String newName) {
-		return ud.getUsers()
-				.stream()
-				.noneMatch((u)->u.getUsername().equals(newName));
-//		for(User u: ud.getUsers()) {
-//			if(u.getUsername().equals(newName))
-//				return false;
-//		}
-//		return true;
+		User u = ud.getUser(newName);
+		return u==null ? true : false;
 	}
 
 	@Override
@@ -90,6 +98,10 @@ public class UserServiceImpl implements UserService {
 		// verify the food exists
 		// verify the food isn't the predator
 		user.getInventory().remove(food);
+		
+		// delete a cat
+		// save a cat
+		// save a user
 	}
 	
 	// summon a gacha
@@ -107,11 +119,13 @@ public class UserServiceImpl implements UserService {
 		List<GachaObject> rarityObjects = gachaDao.getGachasByRarity(Rarity.getRarity(chance));
 		Collections.shuffle(rarityObjects);
 		summonedObject = rarityObjects.get(0);
+		summonedObject.setId(ownedGachaDao.addGacha(summonedObject));
+		
 		// 4. Update the user's currency
 		summoner.setCurrency(summoner.getCurrency() - GachaObject.SUMMON_COST);
-		// 5. Add the object to the inventory
-		summonedObject.setId((long) summoner.getInventory().size());
+		
 		summoner.getInventory().add(summonedObject);
+		ud.updateUser(summoner);
 		// 6. Saving
 		return summonedObject;
 	}

@@ -1,7 +1,9 @@
 package com.revature.beans;
 
+import java.util.UUID;
+
 public class HistoricalCat implements GachaObject {
-	private Long id;
+	private UUID id;
 	private Rarity rarity;
 	private Integer level;
 	private String name;
@@ -25,10 +27,10 @@ public class HistoricalCat implements GachaObject {
 		this.stats.setDefense((int) Math.ceil(this.stats.getDefense() * 1.2));
 		this.stats.setHealth((int) Math.ceil(this.stats.getHealth() * 1.2));
 	}
-	public Long getId() {
+	public UUID getId() {
 		return id;
 	}
-	public void setId(Long id) {
+	public void setId(UUID id) {
 		this.id = id;
 	}
 	public Rarity getRarity() {

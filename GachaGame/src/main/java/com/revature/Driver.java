@@ -16,9 +16,12 @@ import io.javalin.plugin.json.JavalinJackson;
 public class Driver {
 	public static void main(String[] args) {
 		//DataBaseCreator.createUserTable();
-		DataBaseCreator.populateUserTable();
-		//javalin();
-		System.exit(0);
+		//DataBaseCreator.populateUserTable();
+		//DataBaseCreator.createGachaTable();
+		//DataBaseCreator.createOwnedGachaTable();
+		//DataBaseCreator.populateGachaTable();
+		//System.exit(0);
+		javalin();
 	}
 
 	public static void javalin() {

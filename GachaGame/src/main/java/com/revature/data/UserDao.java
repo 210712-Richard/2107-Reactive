@@ -1,6 +1,7 @@
 package com.revature.data;
 
 import java.util.List;
+import java.util.UUID;
 
 import com.revature.beans.User;
 
@@ -13,5 +14,7 @@ public interface UserDao {
 	User getUser(String username);
 
 	void updateUser(User user);
+	
+	List<UUID> getUserInventory(String username);
 
 }

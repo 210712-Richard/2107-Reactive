@@ -149,6 +149,17 @@ In order to optimize our queries we need to model out tables effectively. We wan
 
 If we know that we usually want to retrieve a list of books by author with might consider using it as the partition key instead of title.
 
+
+
+## Data Access Objects
+Data Access Objects are objects that handle the database access for the rest of the application, allowing you to modularize that functionality to a specific location and loosely couple database implementation from your app. DAO's generally consist of CRUD operations with more complex functionality being part of the Service layer, though a DAO might have some more complex operations if needed.
+
+### CRUD
+* CREATE - Insert
+* READ - Select
+* UPDATE - Update
+* DELETE - Delete
+
 ## Using AWS Keyspaces
 ### Set Up Our IAM User
 *IAM*: A service that manages access to other services within your account and from outside your account.
