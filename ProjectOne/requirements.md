@@ -14,11 +14,11 @@ For Project One, you are required to build a REST API that satisifies the requir
 * Complete approval process
 * File upload to skip supervisor approval
 * Discrete Data Access layer
-* Full test coverage for the data and service layers
+* Full test coverage for at least the service layer
 
 You will have 5 minutes to demo this to me and the rest of the batch.
 
-Due Date: 4-30-21
+Due Date: 8-13-21
 
 
 #### Small example
