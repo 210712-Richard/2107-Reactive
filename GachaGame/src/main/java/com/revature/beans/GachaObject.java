@@ -27,4 +27,8 @@ public interface GachaObject extends Serializable{
 	
 	Ability getAbility();
 	void setAbility(Ability ability);
+
+	String getType();
+	void setType(String string);
+	
 }

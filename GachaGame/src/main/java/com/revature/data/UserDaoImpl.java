@@ -92,7 +92,11 @@ public class UserDaoImpl implements UserDao {
 	@Override
 	public void updateUser(User u) {
 		String query = "Update user set type = ?, email = ?, currency = ?, birthday = ?, lastCheckIn = ?, inventory = ? where username = ?;";
-		List<UUID> inventory = u.getInventory().stream().map(g -> g.getId()).collect(Collectors.toList());
+		List<UUID> inventory = u.getInventory()
+				.stream()
+				.filter(g -> g!=null)
+				.map(g -> g.getId())
+				.collect(Collectors.toList());
 		SimpleStatement s = new SimpleStatementBuilder(query).setConsistencyLevel(DefaultConsistencyLevel.LOCAL_QUORUM).build();
 		BoundStatement bound = session.prepare(s)
 				.bind(u.getType().toString(), u.getEmail(), u.getCurrency(), u.getBirthday(), u.getLastCheckIn(), inventory, u.getUsername());

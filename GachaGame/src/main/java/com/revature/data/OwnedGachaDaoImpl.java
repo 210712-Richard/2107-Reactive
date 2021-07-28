@@ -114,7 +114,7 @@ public class OwnedGachaDaoImpl implements OwnedGachaDao {
 
 	@Override
 	public void updateGacha(GachaObject gacha) {
-		String query = "updated owned_gacha set level = ?, stats = ?, name = ?, ability = ? where id = ? and rarity = ?;";
+		String query = "update owned_gacha set level = ?, stats = ?, name = ?, ability = ? where id = ? and rarity = ?;";
 		TupleValue stats = STATS_TUPLE
 				.newValue(gacha.getStats().getAttack(), gacha.getStats().getDefense(), gacha.getStats().getHealth());
 
@@ -140,6 +140,7 @@ public class OwnedGachaDaoImpl implements OwnedGachaDao {
 		g.setLevel(row.getInt("level"));
 		g.setAbility(Ability.valueOf(row.getString("ability")));
 		g.setRarity(Rarity.valueOf(row.getString("rarity")));
+		//g.setType(row.getString("type"));
 		TupleValue stats = row.getTupleValue("stats");
 		g.setStats(new Attributes(stats.get(0, Integer.class),
 				stats.get(1, Integer.class),
@@ -147,6 +148,16 @@ public class OwnedGachaDaoImpl implements OwnedGachaDao {
 		g.setName(row.getString("name"));
 
 		return g;
+	}
+	
+	public void deleteGacha(GachaObject gacha) {
+		String query = "Delete from owned_gacha where id = ?";
+		BoundStatement bound = session
+				.prepare(new SimpleStatementBuilder(query)
+						.setConsistencyLevel(DefaultConsistencyLevel.LOCAL_QUORUM)
+						.build())
+				.bind(gacha.getId());
+		session.execute(bound);
 	}
 
 }

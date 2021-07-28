@@ -18,4 +18,6 @@ public interface OwnedGachaDao {
 	List<GachaObject> getGachasByRarity(Rarity rarity);
 
 	void updateGacha(GachaObject gacha);
+	
+	void deleteGacha(GachaObject gacha);
 }

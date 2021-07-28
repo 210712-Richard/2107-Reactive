@@ -1,5 +1,7 @@
 package com.revature.controllers;
 
+import java.util.UUID;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -128,7 +130,7 @@ public class UserControllerImpl implements UserController {
 			ctx.status(403);
 			return;
 		}
-		Long predatorId = Long.parseLong(ctx.pathParam("gachaId"));
+		UUID predatorId = UUID.fromString(ctx.pathParam("gachaId"));
 		GachaObject predator = loggedUser.getInventory()
 			.stream()
 			.filter((gacha)->gacha.getId().equals(predatorId))

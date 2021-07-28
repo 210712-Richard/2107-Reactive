@@ -153,12 +153,12 @@ Creates a primary key with a Partition key of `title`, a clustering key of `auth
 #### Clustering Key
 A key that orders data within a partition. In our above example, we have partitioned books by title, separating them and are now ordering books based on their author and then their publisher. A query that wanted to get all books by a single author would have to query across multiple partitions but would at least be able to get the author information quickly on each partition.
 
-### Optimizing Queries
+#### Optimizing Queries
 In order to optimize our queries we need to model out tables effectively. We want to spread our data evenly across partitions and we want to minimize the number of partitions we need to query with each query.
 
 If we know that we usually want to retrieve a list of books by author with might consider using it as the partition key instead of title.
 
-### Indexing
+#### Indexing
 An index is an entity that tracks all the records for a particular column in the database. Every node in the database has access to the index which tells them where (which partition) a particular value (row) resides. The index is *just* the primary keys of each row. Since the index has to be updated every time you insert into the database, this can affect performance (which is why we don't make the entire table into the primary key). When you're trying to query the database, checking the index will quickly tell Cassandra where to look, speeding up retrieval. This allows us to query effiently and it's why we cannot query on elements that are not in the primary key.
 
 #### Secondary Indexing
@@ -166,6 +166,25 @@ An index is an entity that tracks all the records for a particular column in the
 
 A Secondary Index is an index that we create in order to enable querying on an element that is not part of the primary key. We essentially create a secondary primary key with it's own index that we can query on. This greatly impacts performance (as now we have to update *two* indices on *each* node in the cluster for *every* write to the table), but enables more powerful querying.
 
+
+### Data Replication
+
+Every Keyspace (set of tables) in a Cassandra cluster defines a replication strategy. This replication strategy dictates how and how often data is replicated or copied across different nodes (cassandra instances) in the cluster.
+
+* **SimpleStrategy**: For use when all clusters exist locally, as in, all the clusters are on the same rack in the same datacenter, as in, they're all physically connected instead of connected via the internet. Places the first replica of a pice of data on a node determined by the partioner and additional replicas are placed on the next node clockwise in the ring.
+
+* **NetworkTopologyStrategy**: Places replicas in the same datacenter by walking the ring clockwise until reaching the first node in a different rack (different computers/not physically connected) to reduce the chance that a rack failure can prevent data accessibility. Can also be configured ot place 2 or 3 replicas in EVERY datacenter that we have nodes in (in case of datacenter failure).
+
+### Deletion
+How do we ensure that all nodes with a piece of data in it no longer have that piece of data in it, if we also require high availability and can't just fail to delete something if one of the nodes with that piece of data in it does not respond?
+
+If you replicate a piece three times, we need to delete three times, but if a node is unavailable it doesn't get the delete request and then it will create ZOMBIE DATA when it comes back, sees that it is the only replica of that data, and causes the data to become replicated.
+
+#### Tombstones
+
+When we delete data in Cassandra we don't actually delete it right away. We turn it into a "Tombstone". This tombstone exists for a specified "grace period" during which the data will not be returned by queries and the tombstone will be replicated to any nodes that previously held that data. At the end of the grace period, the data is erased.
+
+* problem: if the grace periods ends before a node containing the data is able to rejoin the ring, we still get zombie data.
 
 ## Data Access Objects
 Data Access Objects are objects that handle the database access for the rest of the application, allowing you to modularize that functionality to a specific location and loosely couple database implementation from your app. DAO's generally consist of CRUD operations with more complex functionality being part of the Service layer, though a DAO might have some more complex operations if needed.

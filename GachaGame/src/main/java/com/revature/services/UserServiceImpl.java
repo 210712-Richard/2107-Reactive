@@ -100,8 +100,12 @@ public class UserServiceImpl implements UserService {
 		user.getInventory().remove(food);
 		
 		// delete a cat
+		ownedGachaDao.deleteGacha(food);
 		// save a cat
+		ownedGachaDao.updateGacha(predator);
 		// save a user
+		log.debug(user);
+		ud.updateUser(user);
 	}
 	
 	// summon a gacha
