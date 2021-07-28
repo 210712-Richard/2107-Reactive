@@ -12,6 +12,7 @@ import com.datastax.oss.driver.api.core.cql.SimpleStatement;
 import com.datastax.oss.driver.api.core.cql.SimpleStatementBuilder;
 import com.datastax.oss.driver.api.core.data.TupleValue;
 import com.datastax.oss.driver.api.core.type.DataTypes;
+import com.datastax.oss.driver.api.core.type.TupleType;
 import com.revature.beans.Ability;
 import com.revature.beans.Attributes;
 import com.revature.beans.GachaObject;
@@ -23,11 +24,12 @@ import com.revature.util.CassandraUtil;
 @Log
 public class GachaDaoImpl implements GachaDao {
 	private CqlSession session = CassandraUtil.getInstance().getSession();
-
+	private static final TupleType STATS_TUPLE = DataTypes.tupleOf(DataTypes.INT, DataTypes.INT, DataTypes.INT);
+	
 	@Override
 	public void addGacha(GachaObject gacha) {
 		String query = "Insert into gacha (rarity, stats, name, ability) values (?, ?, ?, ?);";
-		TupleValue stats = DataTypes.tupleOf(DataTypes.INT, DataTypes.INT, DataTypes.INT)
+		TupleValue stats = STATS_TUPLE
 				.newValue(gacha.getStats().getAttack(), gacha.getStats().getDefense(), gacha.getStats().getHealth());
 
 		SimpleStatement s = new SimpleStatementBuilder(query).setConsistencyLevel(DefaultConsistencyLevel.LOCAL_QUORUM)
@@ -47,9 +49,10 @@ public class GachaDaoImpl implements GachaDao {
 			GachaObject g = new HistoricalCat();
 			g.setAbility(Ability.valueOf(row.getString("ability")));
 			g.setRarity(Rarity.valueOf(row.getString("rarity")));
-			g.setStats(new Attributes(row.getTupleValue("stats").get(0, Integer.class),
-					row.getTupleValue("stats").get(1, Integer.class),
-					row.getTupleValue("stats").get(2, Integer.class)));
+			TupleValue stats = row.getTupleValue("stats");
+			g.setStats(new Attributes(stats.get(0, Integer.class),
+					stats.get(1, Integer.class),
+					stats.get(2, Integer.class)));
 			g.setName(row.getString("name"));
 			gachas.add(g);
 		});
@@ -101,7 +104,7 @@ public class GachaDaoImpl implements GachaDao {
 	@Override
 	public void updateGacha(GachaObject gacha) {
 		String query = "update gacha set stats=?, ability=? where rarity = ? and name = ?;";
-		TupleValue stats = DataTypes.tupleOf(DataTypes.INT, DataTypes.INT, DataTypes.INT)
+		TupleValue stats = STATS_TUPLE
 				.newValue(gacha.getStats().getAttack(), gacha.getStats().getDefense(), gacha.getStats().getHealth());
 
 		SimpleStatement s = new SimpleStatementBuilder(query).setConsistencyLevel(DefaultConsistencyLevel.LOCAL_QUORUM)

@@ -3,6 +3,7 @@ package com.revature.beans;
 import java.io.Serializable;
 
 public class Attributes implements Serializable {
+	private static final long serialVersionUID = -8308941877131357143L;
 	private Integer attack;
 	private Integer defense;
 	private Integer health;

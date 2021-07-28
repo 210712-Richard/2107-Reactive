@@ -19,17 +19,31 @@ public class DataBaseCreator {
 	private static UserDao ud = new UserDaoImpl();
 	private static GachaDao gd = new GachaDaoImpl();
 	
-	public static void createUserTable() {
+	public static void dropTables() {
 		StringBuilder sb = new StringBuilder("DROP TABLE IF EXISTS User;");
 		CassandraUtil.getInstance().getSession().execute(sb.toString());
-		try {
-			Thread.sleep(10000);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-		sb = new StringBuilder("CREATE TABLE IF NOT EXISTS User (")
+		
+		sb = new StringBuilder("DROP TABLE IF EXISTS Gacha;");
+		CassandraUtil.getInstance().getSession().execute(sb.toString());
+		
+		sb = new StringBuilder("DROP TABLE IF EXISTS Owned_Gacha;");
+		CassandraUtil.getInstance().getSession().execute(sb.toString());
+	}
+	
+	public static void createTables() {
+		StringBuilder sb = new StringBuilder("CREATE TABLE IF NOT EXISTS User (")
 				.append("username text PRIMARY KEY, type text, currency bigint, ")
 				.append("birthday date, lastCheckIn date, email text, inventory list<uuid> );");
+		CassandraUtil.getInstance().getSession().execute(sb.toString());
+		
+		sb = new StringBuilder("CREATE TABLE IF NOT EXISTS Gacha (")
+				.append("rarity text, level int, id bigint, ability text,")
+				.append(" name text, stats tuple<int, int, int>, primary key (rarity, name)); ");
+		CassandraUtil.getInstance().getSession().execute(sb.toString());
+		
+		sb = new StringBuilder("CREATE TABLE IF NOT EXISTS Owned_Gacha (")
+				.append("rarity text, level int, id uuid, ability text,")
+				.append(" name text, stats tuple<int, int, int>, primary key (id, rarity)); ");
 		CassandraUtil.getInstance().getSession().execute(sb.toString());
 	}
 	
@@ -41,33 +55,6 @@ public class DataBaseCreator {
 		ud.addUser(new User("Jaclyn", "jaclyn@jaclyn.jaclyn", LocalDate.of(1660, 4, 2), 1000l));
 		ud.addUser(new User("Joshua", "one@josh.alltime", LocalDate.of(1984, 1, 25), 1000l));
 		ud.addUser(new User("Stephen", "stephen@steven.steve", LocalDate.of(1880, 7, 23), 1000l));
-	}
-
-	public static void createGachaTable() {
-		StringBuilder sb = new StringBuilder("DROP TABLE IF EXISTS Gacha;");
-		CassandraUtil.getInstance().getSession().execute(sb.toString());
-		try {
-			Thread.sleep(10000);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-		sb = new StringBuilder("CREATE TABLE IF NOT EXISTS Gacha (")
-				.append("rarity text, level int, id bigint, ability text,")
-				.append(" name text, stats tuple<int, int, int>, primary key (rarity, name)); ");
-		CassandraUtil.getInstance().getSession().execute(sb.toString());
-	}
-	public static void createOwnedGachaTable() {
-		StringBuilder sb = new StringBuilder("DROP TABLE IF EXISTS Owned_Gacha;");
-		CassandraUtil.getInstance().getSession().execute(sb.toString());
-		try {
-			Thread.sleep(10000);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-		sb = new StringBuilder("CREATE TABLE IF NOT EXISTS Owned_Gacha (")
-				.append("rarity text, level int, id uuid, ability text,")
-				.append(" name text, stats tuple<int, int, int>, primary key (id, rarity)); ");
-		CassandraUtil.getInstance().getSession().execute(sb.toString());
 	}
 
 	public static void populateGachaTable() {

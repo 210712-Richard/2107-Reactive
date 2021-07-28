@@ -3,6 +3,7 @@ package com.revature.beans;
 import java.util.UUID;
 
 public class HistoricalCat implements GachaObject {
+	private static final long serialVersionUID = 8127818726714331011L;
 	private UUID id;
 	private Rarity rarity;
 	private Integer level;

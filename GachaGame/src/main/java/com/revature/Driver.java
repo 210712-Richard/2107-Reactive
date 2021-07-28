@@ -8,20 +8,32 @@ import com.revature.controllers.GachaControllerImpl;
 import com.revature.controllers.UserController;
 import com.revature.controllers.UserControllerImpl;
 import com.revature.factory.BeanFactory;
-import com.revature.util.CassandraUtil;
 
 import io.javalin.Javalin;
 import io.javalin.plugin.json.JavalinJackson;
 
 public class Driver {
 	public static void main(String[] args) {
-		//DataBaseCreator.createUserTable();
-		//DataBaseCreator.populateUserTable();
-		//DataBaseCreator.createGachaTable();
-		//DataBaseCreator.createOwnedGachaTable();
-		//DataBaseCreator.populateGachaTable();
-		//System.exit(0);
+		//instantiateDatabase();
 		javalin();
+	}
+
+	public static void instantiateDatabase() {
+		DataBaseCreator.dropTables();
+		try {
+			Thread.sleep(20000); // wait 20 seconds
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		DataBaseCreator.createTables();
+		try {
+			Thread.sleep(10000); // wait 10 seconds
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		DataBaseCreator.populateUserTable();
+		DataBaseCreator.populateGachaTable();
+		System.exit(0);
 	}
 
 	public static void javalin() {

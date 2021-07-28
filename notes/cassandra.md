@@ -137,6 +137,15 @@ The key in charge of partitioning data. Data locality (which partition the data 
 
 Choosing a partition key with low variance (a lot of data has the same value) might result in clustering in one partiton over the others.
 
+##### Complex Partition Keys
+You can make more than one column into the partition key by declaring it as part of a tuple.
+
+* Note the below is cql, but Markdown isn't smart enough to know what that is, so I used sql
+```sql
+create table book (title varchar, author varchar, publisher varchar, price float, primary key ( (title, author), publisher)
+```
+The above snippet creates a table where the partition key is the combination of title *and* author, possibly creating a very large number of partitions, with a cluster key of publisher.
+
 #### Complex Key
 `create table if not exists book (title, author, publisher, genre, primary key (title, author, publisher))`
 Creates a primary key with a Partition key of `title`, a clustering key of `author` and a second clustering key of `publisher`
@@ -149,6 +158,13 @@ In order to optimize our queries we need to model out tables effectively. We wan
 
 If we know that we usually want to retrieve a list of books by author with might consider using it as the partition key instead of title.
 
+### Indexing
+An index is an entity that tracks all the records for a particular column in the database. Every node in the database has access to the index which tells them where (which partition) a particular value (row) resides. The index is *just* the primary keys of each row. Since the index has to be updated every time you insert into the database, this can affect performance (which is why we don't make the entire table into the primary key). When you're trying to query the database, checking the index will quickly tell Cassandra where to look, speeding up retrieval. This allows us to query effiently and it's why we cannot query on elements that are not in the primary key.
+
+#### Secondary Indexing
+**NOTE:** AWS Keyspaces does not support Secondary Indices
+
+A Secondary Index is an index that we create in order to enable querying on an element that is not part of the primary key. We essentially create a secondary primary key with it's own index that we can query on. This greatly impacts performance (as now we have to update *two* indices on *each* node in the cluster for *every* write to the table), but enables more powerful querying.
 
 
 ## Data Access Objects

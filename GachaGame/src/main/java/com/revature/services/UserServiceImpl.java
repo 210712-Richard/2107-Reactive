@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -36,6 +35,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public User login(String name) {
 		User u = ud.getUser(name);
+		// TODO: Make this more reactive
 		List<UUID> inventoryIds = ud.getUserInventory(name);
 		
 		List<GachaObject> inventory = inventoryIds.stream()

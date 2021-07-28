@@ -29,7 +29,6 @@ public class UserDaoImpl implements UserDao {
 //				.append(" values ('"+u.getUsername()+"', '"+u.getType()+"', '"
 //				+u.getEmail()+"', "+u.getCurrency()+", '"+u.getBirthday()
 //				+"', '"+u.getLastCheckIn()+"');");
-		
 //		System.out.println(sb.toString());
 //		SimpleStatement s = new SimpleStatementBuilder(sb.toString())
 //				.setConsistencyLevel(DefaultConsistencyLevel.LOCAL_QUORUM).build();
@@ -83,6 +82,10 @@ public class UserDaoImpl implements UserDao {
 		u.setType(UserType.valueOf(row.getString("type")));
 		u.setBirthday(row.getLocalDate("birthday"));
 		u.setLastCheckIn(row.getLocalDate("lastcheckin"));
+//		row = rs.one();
+//		if(row != null) {
+//			throw new RuntimeException("More than one user with same username");
+//		}
 		return u;
 	}
 
