@@ -137,6 +137,9 @@ The key in charge of partitioning data. Data locality (which partition the data 
 
 Choosing a partition key with low variance (a lot of data has the same value) might result in clustering in one partiton over the others.
 
+#####  Sharding
+The concept of splitting the contents of a table based on a hash of the primary key across multiple partitions of the database. The idea that a-f exists on nodes 1, 3, 5, but g-l exists on nodes 2, 4, 6. By splitting the table into manageable chunks we can scale linearly. Each node can contain what they can contain and we don't need to scale our individual nodes to larger computers as the contents of our tables get larger. Cassandra is always sharding our data across the nodes.
+
 ##### Complex Partition Keys
 You can make more than one column into the partition key by declaring it as part of a tuple.
 
@@ -166,14 +169,35 @@ An index is an entity that tracks all the records for a particular column in the
 
 A Secondary Index is an index that we create in order to enable querying on an element that is not part of the primary key. We essentially create a secondary primary key with it's own index that we can query on. This greatly impacts performance (as now we have to update *two* indices on *each* node in the cluster for *every* write to the table), but enables more powerful querying.
 
+### Materialized Views
+A Table comprised of a query in the database.
+You cannot write to this table, but you can select from it.
+It will have the up to date information because it essentially runs the underlying query when you query it. However, when you create your materialized view, you can specify a new primary key that you can use to query the materialized view. There are performance implications with querying on the materialized view but it shouldn't impact write queries the way an index would.
 
-### Data Replication
+### Architecture
+
+Cassandra is comprised of a cluster of nodes.
+* *Cluster*: A collection of nodes that represents a single system.
+* *Node*: An instance of a Cassandra DB. All nodes in Cassandra are identical. (there are no master or head nodes in Cassandra)
+
+Our cluster has nodes, those nodes have keyspaces, those keyspaces have column families (partitions of tables), those partitions have rows, those rows have columns.
+
+Nodes register with the cluster in a Ring formation, and each node has two neighbors. Just like a doubly linked list that is eating it's own tail.
+
+**Gossip**: "Gossip is a peer-to-peer communication protocol in which nodes periodically exchange state information about themselves and about other nodes they know about. The gossip process runs every second and exchanges state messages with up to three other nodes in the cluster." [Stolen semi-shamelessly](https://intellipaat.com/blog/tutorial/cassandra-tutorial/brief-architecture-of-cassandra/)
+
+#### Data Replication
 
 Every Keyspace (set of tables) in a Cassandra cluster defines a replication strategy. This replication strategy dictates how and how often data is replicated or copied across different nodes (cassandra instances) in the cluster.
 
 * **SimpleStrategy**: For use when all clusters exist locally, as in, all the clusters are on the same rack in the same datacenter, as in, they're all physically connected instead of connected via the internet. Places the first replica of a pice of data on a node determined by the partioner and additional replicas are placed on the next node clockwise in the ring.
 
-* **NetworkTopologyStrategy**: Places replicas in the same datacenter by walking the ring clockwise until reaching the first node in a different rack (different computers/not physically connected) to reduce the chance that a rack failure can prevent data accessibility. Can also be configured ot place 2 or 3 replicas in EVERY datacenter that we have nodes in (in case of datacenter failure).
+* **NetworkTopologyStrategy**: Places replicas in the same datacenter by walking the ring clockwise until reaching the first node in a different rack (different computers/not physically connected) to reduce the chance that a rack failure can prevent data accessibility. Can also be configured to place 2 or 3 replicas in EVERY datacenter that we have nodes in (in case of datacenter failure).
+
+#### Snitches
+
+A snitch determines which datacenter and rack a node belongs to. Snitches inform Cassandra about the network topology of the cluster so that requests are routed efficiently and Cassandra can distribute replicas properly.
+
 
 ### Deletion
 How do we ensure that all nodes with a piece of data in it no longer have that piece of data in it, if we also require high availability and can't just fail to delete something if one of the nodes with that piece of data in it does not respond?
@@ -185,6 +209,37 @@ If you replicate a piece three times, we need to delete three times, but if a no
 When we delete data in Cassandra we don't actually delete it right away. We turn it into a "Tombstone". This tombstone exists for a specified "grace period" during which the data will not be returned by queries and the tombstone will be replicated to any nodes that previously held that data. At the end of the grace period, the data is erased.
 
 * problem: if the grace periods ends before a node containing the data is able to rejoin the ring, we still get zombie data. The default grace period is 10 days.
+
+
+### Data Consistency Levels
+
+In Cassandra we have generally sacrificed Consistency for Fault Tolerance. This is not actually how Cassandra works. Rather, Cassandra gives us the option to choose the level of consistency we wish to use. How much availability are we willing to sacrifice for consistency and vice versa. We can't have both because of the partitions, but we can have some level of either.
+
+In Cassandra, consistency levels determine how many nodes in the cluster must respond to the node that recieved a query before a response gets sent. The consistency level is configurable on the query itself.
+
+* **ALL**: All nodes containing replicas of the data must respond to the request for that data. If a node with that data is not available, the data is not available. Highest level of consistency, lowest level of availability.
+* **QUORUM**: One + 1/2 the number of replicas must respond across all data centers.
+  * 16 replicas in 4 datacenters.
+  * Quorum is 9, we need 9 responses in order to respond. If only 8 replicas are available, the data is not available.
+* **EACH_QUORUM**: Quorum in EACH data center.
+  * You cannot perform a READ operation (SELECT) at EACH_QUORUM, only writes.
+  * 16 replicas in 4 datacenters.
+    * 4 replicas in each datacenter.
+    * Quorum in each datacenter is 3
+    * We need  to get quorum (3 reponses) from each of the 4 datacenters for a total of 12.
+* **LOCAL_QUORUM**: (AWS Keyspaces) Quorum in ONE Data center
+  * 16 replicas in 4 datacenters
+    * 4 replicase in each
+    * quorum in each is 3
+    * One datacenter has to respond with 3 responses
+* **ONE**: (AWS Keyspaces) Closest replicas as determined by the snitch must respond. Lowest level of consistency but the highest read availability.
+    * We send a request, if the node that receives the request has the data, it just sends it back, otherwise it finds the closest, and sends that back.
+* **TWO**: The closest TWO replicas as determined by the snitch must respond.
+* **THREE**: see above
+* **LOCAL_ONE**: (AWS Keyspaces) Returns a response from the closes replica in the local data center. (for security reasons in an offline environment)
+* **ANY**: Closest replicas as determined by the snitch. If all replicas are down, write succeeds. Lowest write consistency, highest write availability.
+* **SERIAL**: Returns results with the *most recent* data. (This includes data that has not yet been saved, because it is waiting for quorum). This is a very high level of availability but might return incorrect data.
+* **LOCAL_SERIAL**: Same as Serial but confined to the datacenter.
 
 ## Data Access Objects
 Data Access Objects are objects that handle the database access for the rest of the application, allowing you to modularize that functionality to a specific location and loosely couple database implementation from your app. DAO's generally consist of CRUD operations with more complex functionality being part of the Service layer, though a DAO might have some more complex operations if needed.
