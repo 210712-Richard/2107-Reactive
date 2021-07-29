@@ -184,7 +184,7 @@ If you replicate a piece three times, we need to delete three times, but if a no
 
 When we delete data in Cassandra we don't actually delete it right away. We turn it into a "Tombstone". This tombstone exists for a specified "grace period" during which the data will not be returned by queries and the tombstone will be replicated to any nodes that previously held that data. At the end of the grace period, the data is erased.
 
-* problem: if the grace periods ends before a node containing the data is able to rejoin the ring, we still get zombie data.
+* problem: if the grace periods ends before a node containing the data is able to rejoin the ring, we still get zombie data. The default grace period is 10 days.
 
 ## Data Access Objects
 Data Access Objects are objects that handle the database access for the rest of the application, allowing you to modularize that functionality to a specific location and loosely couple database implementation from your app. DAO's generally consist of CRUD operations with more complex functionality being part of the Service layer, though a DAO might have some more complex operations if needed.
