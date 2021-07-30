@@ -38,12 +38,12 @@ public class DataBaseCreator {
 		
 		sb = new StringBuilder("CREATE TABLE IF NOT EXISTS Gacha (")
 				.append("rarity text, level int, id bigint, ability text,")
-				.append(" name text, stats tuple<int, int, int>, primary key (rarity, name)); ");
+				.append(" name text, stats tuple<int, int, int>, pictureUrl text, primary key (rarity, name)); ");
 		CassandraUtil.getInstance().getSession().execute(sb.toString());
 		
 		sb = new StringBuilder("CREATE TABLE IF NOT EXISTS Owned_Gacha (")
 				.append("rarity text, level int, id uuid, ability text,")
-				.append(" name text, stats tuple<int, int, int>, primary key (id, rarity)); ");
+				.append(" name text, stats tuple<int, int, int>, pictureUrl text, primary key (id, rarity)); ");
 		CassandraUtil.getInstance().getSession().execute(sb.toString());
 	}
 	

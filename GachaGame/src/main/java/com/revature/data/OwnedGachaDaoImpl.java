@@ -29,14 +29,14 @@ public class OwnedGachaDaoImpl implements OwnedGachaDao {
 
 	@Override
 	public UUID addGacha(GachaObject gacha) {
-		String query = "Insert into owned_gacha (id, level, rarity, stats, name, ability) values (?, ?, ?, ?, ?, ?);";
+		String query = "Insert into owned_gacha (id, level, rarity, stats, name, ability, pictureUrl) values (?, ?, ?, ?, ?, ?, ?);";
 		TupleValue stats = STATS_TUPLE
 				.newValue(gacha.getStats().getAttack(), gacha.getStats().getDefense(), gacha.getStats().getHealth());
 		UUID id = UUID.randomUUID();
 		SimpleStatement s = new SimpleStatementBuilder(query).setConsistencyLevel(DefaultConsistencyLevel.LOCAL_QUORUM)
 				.build();
 		BoundStatement bound = session.prepare(s).bind(id, gacha.getLevel(), gacha.getRarity().toString(),
-				stats, gacha.getName(), gacha.getAbility().toString());
+				stats, gacha.getName(), gacha.getAbility().toString(), gacha.getPictureUrl());
 		session.execute(bound);
 		return id;
 	}
@@ -44,7 +44,7 @@ public class OwnedGachaDaoImpl implements OwnedGachaDao {
 	@Override
 	public List<GachaObject> getGachas() {
 		List<GachaObject> gachas = new ArrayList<GachaObject>();
-		String query = "Select id, level, rarity, stats, name, ability from owned_gacha";
+		String query = "Select id, level, rarity, stats, name, ability, pictureUrl from owned_gacha";
 		ResultSet rs = session.execute(new SimpleStatementBuilder(query).build());
 
 		rs.forEach(row -> {
@@ -58,6 +58,8 @@ public class OwnedGachaDaoImpl implements OwnedGachaDao {
 					stats.get(1, Integer.class),
 					stats.get(2, Integer.class)));
 			g.setName(row.getString("name"));
+
+			g.setPictureUrl(row.getString("pictureUrl"));
 			gachas.add(g);
 		});
 
@@ -66,7 +68,7 @@ public class OwnedGachaDaoImpl implements OwnedGachaDao {
 
 	@Override
 	public GachaObject getGachaByName(String name) {
-		String query = "Select id, level, rarity, stats, name, ability from owned_gacha where name = ?";
+		String query = "Select id, level, rarity, stats, name, ability, pictureUrl from owned_gacha where name = ?";
 		BoundStatement bound = session.prepare(new SimpleStatementBuilder(query).build()).bind(name);
 		ResultSet rs = session.execute(bound);
 
@@ -85,13 +87,14 @@ public class OwnedGachaDaoImpl implements OwnedGachaDao {
 				stats.get(2, Integer.class)));
 		g.setName(row.getString("name"));
 
+		g.setPictureUrl(row.getString("pictureUrl"));
 		return g;
 	}
 
 	@Override
 	public List<GachaObject> getGachasByRarity(Rarity rarity) {
 		List<GachaObject> gachas = new ArrayList<GachaObject>();
-		String query = "Select id, level, rarity, stats, name, ability from owned_gacha where rarity = ?";
+		String query = "Select id, level, rarity, stats, name, ability, pictureUrl from owned_gacha where rarity = ?";
 		BoundStatement bound = session.prepare(new SimpleStatementBuilder(query).build()).bind(rarity.toString());
 		ResultSet rs = session.execute(bound);
 
@@ -106,6 +109,7 @@ public class OwnedGachaDaoImpl implements OwnedGachaDao {
 					stats.get(1, Integer.class),
 					stats.get(2, Integer.class)));
 			g.setName(row.getString("name"));
+			g.setPictureUrl(row.getString("pictureUrl"));
 			gachas.add(g);
 		});
 
@@ -127,7 +131,7 @@ public class OwnedGachaDaoImpl implements OwnedGachaDao {
 
 	@Override
 	public GachaObject getGachaById(UUID id) {
-		String query = "Select id, level, rarity, stats, name, ability from owned_gacha where id = ?";
+		String query = "Select id, level, rarity, stats, name, ability, pictureUrl from owned_gacha where id = ?";
 		BoundStatement bound = session.prepare(new SimpleStatementBuilder(query).build()).bind(id);
 		ResultSet rs = session.execute(bound);
 
@@ -146,7 +150,7 @@ public class OwnedGachaDaoImpl implements OwnedGachaDao {
 				stats.get(1, Integer.class),
 				stats.get(2, Integer.class)));
 		g.setName(row.getString("name"));
-
+		g.setPictureUrl(row.getString("pictureUrl"));
 		return g;
 	}
 	

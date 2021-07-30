@@ -1,6 +1,7 @@
 package com.revature.services;
 
 import com.revature.beans.GachaObject;
+import com.revature.beans.Rarity;
 import com.revature.data.GachaDao;
 import com.revature.data.GachaDaoImpl;
 import com.revature.factory.BeanFactory;
@@ -18,6 +19,13 @@ public class GachaServiceImpl implements GachaService {
 		return gacha;
 	}
 	// edit an existing gacha in the pool
+	public void updateGacha(GachaObject gacha) {
+		gachaDao.updateGacha(gacha);
+	}
+	@Override
+	public GachaObject getGacha(Rarity rarity, String gachaName) {
+		return gachaDao.getGachaByRarityAndName(rarity, gachaName);
+	}
 	
 	// remove a gacha from the pool
 

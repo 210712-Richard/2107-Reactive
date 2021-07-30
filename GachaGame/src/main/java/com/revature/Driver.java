@@ -21,13 +21,13 @@ public class Driver {
 	public static void instantiateDatabase() {
 		DataBaseCreator.dropTables();
 		try {
-			Thread.sleep(20000); // wait 20 seconds
+			Thread.sleep(30000); // wait 30 seconds
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
 		DataBaseCreator.createTables();
 		try {
-			Thread.sleep(10000); // wait 10 seconds
+			Thread.sleep(20000); // wait 20 seconds
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
@@ -83,7 +83,16 @@ public class Driver {
 		// As a player, I can view my gachas
 		app.get("/users/:username/inventory", uc::viewGachas);
 		
-		//As an admin, I van add an Gacha object
-		app.post("/users/:username/", gachaController::addGacha);
+		// As an admin, I can add an Gacha object
+		app.post("/gachas", gachaController::addGacha);
+		
+		// As an admin, I can update a Gacha in the pool
+		app.put("/gachas/:gachaRarity/:gachaName", gachaController::updateGacha);
+		
+		// As an admin, I can upload a picture for a Gacha
+		app.put("/gachas/:gachaRarity/:gachaName/pictureUrl", gachaController::uploadPicture);
+		
+		// As a user, I can download a picture for a Gacha
+		app.get("/gachas/:gachaRarity/:gachaName/pictureUrl", gachaController::getPicture);
 	}
 }

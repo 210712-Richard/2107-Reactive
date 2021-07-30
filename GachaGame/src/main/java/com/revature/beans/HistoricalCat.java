@@ -11,6 +11,8 @@ public class HistoricalCat implements GachaObject {
 	private String type;
 	private Attributes stats;
 	private Ability ability;
+	private String pictureUrl;
+	
 	public HistoricalCat() {
 		super();
 		this.level = 0;
@@ -69,6 +71,12 @@ public class HistoricalCat implements GachaObject {
 	}
 	public void setAbility(Ability ability) {
 		this.ability = ability;
+	}
+	public String getPictureUrl() {
+		return pictureUrl;
+	}
+	public void setPictureUrl(String pictureUrl) {
+		this.pictureUrl = pictureUrl;
 	}
 	@Override
 	public int hashCode() {

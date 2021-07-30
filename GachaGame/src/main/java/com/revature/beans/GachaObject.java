@@ -31,4 +31,7 @@ public interface GachaObject extends Serializable{
 	String getType();
 	void setType(String string);
 	
+	String getPictureUrl();
+	void setPictureUrl(String pictureUrl);
+	
 }

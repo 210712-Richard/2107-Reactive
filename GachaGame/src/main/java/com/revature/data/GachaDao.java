@@ -11,7 +11,7 @@ public interface GachaDao {
 
 	List<GachaObject> getGachas();
 	
-	GachaObject getGachaByName(String name);
+	GachaObject getGachaByRarityAndName(Rarity rarity, String name);
 
 	List<GachaObject> getGachasByRarity(Rarity rarity);
 

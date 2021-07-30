@@ -107,3 +107,25 @@ Elastic Block Storage - Essentially a harddrive for EC2. In reality is usually a
 ## Security Groups
 
 A security group is a whitelist of IP-addresses and port-ranges that are allowed to access your resource. By default, nothing can access your resource.
+
+
+---
+With EC2, you have a barebones server with maybe an operating system and some software, but you have to ssh in, install any software you don't already have, configure the system, upload your application, configure it, and then run it.
+
+This is what we call a "Snowflake" server. We had to manually configure "everything" and we have to put that kind of effort into every instance.
+
+## Elastic Beanstalk
+
+Upload code, AWS will provision resources, configure, and run that code on those resources.
+
+## S3
+
+Simple Storage Service. A service that provides object storage. S3 stores data as "objects", inside of "buckets".
+
+Inside of a bucket, every piece of data is treated as a immutable chunk. We can't modify any "object" without uploading a completely new version of that object. Each object in S3 has a key which acts as the filename for that object. The key can be something like: `hello.txt` or `src/main/java/hello.java`. S3 has no directory structure, all "folders" are actually just parts of the object key, since all objects are stored "flat".
+
+Buckets must have a unique name and that name is part of the domain name used to access the service.
+
+S3 can be accessed via the AWS console, AWS SDK, or the Rest interface.
+
+By default (and best practice) S3 Buckets are private

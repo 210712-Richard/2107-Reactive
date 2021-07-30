@@ -14,5 +14,6 @@
 * As a player, I can manage my inventory.
 * As a player, I can send my heroes on quests. *week4*
 * As a game master, I can add new heroes to the pool.
+* As a game master, I can add pictures of heroes.
 * As a game master, I can modify drop rates for heroes.
 * As a game master, I can manage player accounts.
