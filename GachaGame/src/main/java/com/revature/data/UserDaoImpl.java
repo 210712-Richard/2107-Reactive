@@ -23,6 +23,8 @@ public class UserDaoImpl implements UserDao {
 
 	@Override
 	public void addUser(User u) {
+		
+		// username = "hello';--"
 		// SimpleStatement leaves us vulnerable to CQL injection and also it's hard to read and write.
 //		StringBuilder sb = new StringBuilder("Insert into user ")
 //				.append("(username, type, email, currency, birthday, lastCheckIn)")

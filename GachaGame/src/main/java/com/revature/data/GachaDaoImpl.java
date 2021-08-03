@@ -6,6 +6,7 @@ import java.util.List;
 import com.datastax.oss.driver.api.core.CqlSession;
 import com.datastax.oss.driver.api.core.DefaultConsistencyLevel;
 import com.datastax.oss.driver.api.core.cql.BoundStatement;
+import com.datastax.oss.driver.api.core.cql.PreparedStatement;
 import com.datastax.oss.driver.api.core.cql.ResultSet;
 import com.datastax.oss.driver.api.core.cql.Row;
 import com.datastax.oss.driver.api.core.cql.SimpleStatement;
@@ -34,8 +35,9 @@ public class GachaDaoImpl implements GachaDao {
 
 		SimpleStatement s = new SimpleStatementBuilder(query).setConsistencyLevel(DefaultConsistencyLevel.LOCAL_QUORUM)
 				.build();
-		BoundStatement bound = session.prepare(s).bind(gacha.getRarity().toString(), stats, gacha.getName(),
-				gacha.getAbility().toString(), gacha.getPictureUrl());
+		PreparedStatement p = session.prepare(s); // Hey, this statement has parameters and we need to specify what they are.
+		BoundStatement bound = p.bind(gacha.getRarity().toString(), stats, gacha.getName(),
+				gacha.getAbility().toString(), gacha.getPictureUrl()); // Put these values into the ? parameters in this order
 		session.execute(bound);
 	}
 
