@@ -39,3 +39,11 @@ To create a thread that does something, you have to extend `Thread` and override
   * Canadian Standoff: T1 says "after you". T2 says "after you". T1 says "After you." etc...
 * **Starvation**: T1 and T2 are sharing resource equally. When T1 lets A go, T2 gets it. When T2 lets it go, T1 gets it. Everything is fine, except that T3 also needs A but can't get it because the other two threads always have it. T3 is *starving*.
 * **Race Conditions**: When two threads try to access a resource at the same time and unwanted behavior results based on "who got there first".
+
+#### Producer/Consumer
+
+**Producer**: An entity that makes something that needs to be processed available.
+
+**Consumer**: An entity that processes something that needs to be processed.
+
+Producer Consumer Problem is when either the Producers or the Consumers end up starving out the other, and you either end up with Consumers with no data to consume or Producers that produce data faster than Consumers can consume it. This can be fixed with Thread-safe datastructures.
