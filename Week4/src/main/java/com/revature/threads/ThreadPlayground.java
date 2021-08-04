@@ -67,7 +67,7 @@ public class ThreadPlayground {
 		}
 	}
 
-	private static void fourThreads() {
+	public static void fourThreads() {
 		double start = System.currentTimeMillis();
 
 		Thread t1 = new Thread(() -> {
@@ -260,5 +260,29 @@ class Resource {
 	}
 	public void setI(int i) {
 		this.i = i;
+	}
+}
+
+class MockThread {
+	Runnable r;
+	MockThread(){
+		
+	}
+	MockThread(Runnable r) {
+		this.r = r;
+	}
+	
+	void start() {
+		// vague thread stuff to make a thread
+		
+		// if the runnable is there, call that, otherwise call the run method
+		if(r==null) {
+			this.run();
+		} else {
+			r.run();
+		}
+	}
+	void run() {
+		
 	}
 }

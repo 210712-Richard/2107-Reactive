@@ -29,4 +29,17 @@ We can write applications that are able to perform tasks while they wait for dat
 * **Observable**: an object that receives data from a data source and allows an observer to subscribe to changes to it's state.
 
 ### Subjects
+An entity that acts as both an Observer and an Observable.
+
+It can subscribe to an Observable and Observers can subscribe to it.
+
+Can be useful for processing data before the end-consumer receives it.
+
 ### Schedulers (Week 4)
+Schedulers dictate concurrency behavior for subscribers.
+
+* IO: Reuses any threads that are done with their tasks and creates a new one if none are available.
+* NewThread: Creates a new thread for every task
+* Single: same thread. (it will interrupt current tasks)
+* Trampoline: same thread, but waits for previous tasks to complete
+* from: Allows you to wrap an Executor as a scheduler

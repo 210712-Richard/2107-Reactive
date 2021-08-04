@@ -47,3 +47,9 @@ To create a thread that does something, you have to extend `Thread` and override
 **Consumer**: An entity that processes something that needs to be processed.
 
 Producer Consumer Problem is when either the Producers or the Consumers end up starving out the other, and you either end up with Consumers with no data to consume or Producers that produce data faster than Consumers can consume it. This can be fixed with Thread-safe datastructures.
+
+### Monitor Design Pattern
+See Example
+
+### Executor Service and Callables
+See Example
