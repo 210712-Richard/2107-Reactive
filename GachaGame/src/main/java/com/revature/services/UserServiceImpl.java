@@ -134,4 +134,9 @@ public class UserServiceImpl implements UserService {
 		return summonedObject;
 	}
 
+	@Override
+	public void updateUser(User user) {
+		ud.updateUser(user);
+	}
+
 }

@@ -100,5 +100,11 @@
 			<artifactId>httpcore</artifactId>
 			<version>4.4.14</version>
 		</dependency>
+		
+		<dependency>
+			<groupId>io.reactivex.rxjava3</groupId>
+			<artifactId>rxjava</artifactId>
+			<version>3.0.4</version>
+		</dependency>
 	</dependencies>
 </project>

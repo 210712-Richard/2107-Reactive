@@ -1,5 +1,8 @@
 package com.revature;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -13,6 +16,7 @@ import io.javalin.Javalin;
 import io.javalin.plugin.json.JavalinJackson;
 
 public class Driver {
+	private static Logger log = LogManager.getLogger(Driver.class);
 	public static void main(String[] args) {
 		//instantiateDatabase();
 		javalin();
@@ -80,6 +84,9 @@ public class Driver {
 		// As a player, I can level up my gacha
 		app.put("/users/:username/inventory/:gachaId", uc::level);
 		
+		// As a player, I can send my gacha on a mission
+		app.put("/users/:username/inventory/:gachaId/quest", uc::sendOnMission);
+		
 		// As a player, I can view my gachas
 		app.get("/users/:username/inventory", uc::viewGachas);
 		
@@ -94,5 +101,13 @@ public class Driver {
 		
 		// As a user, I can download a picture for a Gacha
 		app.get("/gachas/:gachaRarity/:gachaName/pictureUrl", gachaController::getPicture);
+		
+		app.get("/gachasReactive", (ctx)->{
+			com.revature.nio.service.GachaService gs = new com.revature.nio.service.GachaService();
+			gs.getGachas().subscribe((gacha) ->
+			{
+				log.debug(gacha);
+			});
+		});
 	}
 }

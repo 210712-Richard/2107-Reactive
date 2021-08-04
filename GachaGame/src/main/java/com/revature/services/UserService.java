@@ -24,5 +24,7 @@ public interface UserService {
 
 	// summon a gacha
 	GachaObject summon(User summoner);
+	
+	void updateUser(User user);
 
 }

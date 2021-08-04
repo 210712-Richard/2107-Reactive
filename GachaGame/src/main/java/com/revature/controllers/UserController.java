@@ -21,5 +21,6 @@ public interface UserController {
 
 	// Group 2 - branch: view-gacha
 	void viewGachas(Context ctx);
-
+	
+	void sendOnMission(Context ctx);
 }

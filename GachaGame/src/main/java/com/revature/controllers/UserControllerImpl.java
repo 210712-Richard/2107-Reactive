@@ -1,6 +1,8 @@
 package com.revature.controllers;
 
 import java.util.UUID;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -14,6 +16,8 @@ import com.revature.services.UserService;
 import com.revature.services.UserServiceImpl;
 
 import io.javalin.http.Context;
+import io.reactivex.rxjava3.core.Observable;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
 @Log
 public class UserControllerImpl implements UserController {
@@ -162,5 +166,33 @@ public class UserControllerImpl implements UserController {
 		
 		// send back the loggedin User's inventory.
 		ctx.json(loggedUser.getInventory());
+	}
+
+	@Override
+	public void sendOnMission(Context ctx) {
+		User loggedUser = ctx.sessionAttribute("loggedUser");
+		String username = ctx.pathParam("username");
+		if(loggedUser == null || !loggedUser.getUsername().equals(username)) {
+			ctx.status(403);
+			return;
+		}
+		GachaObject questant = loggedUser
+				.getInventory()
+				.stream()
+				.filter((g)->g.getId().equals(UUID.fromString(ctx.pathParam("gachaId"))))
+				.findFirst()
+				.orElse(null);
+		if(questant == null) {
+			ctx.status(400);
+			return;
+		}
+		Future<Long> receivedCurrency = Executors.newCachedThreadPool().submit(questant.getAbility());
+		Observable.fromFuture(receivedCurrency).subscribeOn(Schedulers.io()).observeOn(Schedulers.io()).subscribe((currency)->{
+			loggedUser.setCurrency(loggedUser.getCurrency()+currency);
+			us.updateUser(loggedUser);
+		});
+		
+		ctx.status(200);
+		return;
 	}
 }

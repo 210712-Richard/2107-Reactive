@@ -1,11 +1,15 @@
 package com.revature.services;
 
+import java.util.List;
+
 import com.revature.beans.GachaObject;
 import com.revature.beans.Rarity;
 import com.revature.data.GachaDao;
 import com.revature.data.GachaDaoImpl;
 import com.revature.factory.BeanFactory;
 import com.revature.factory.Log;
+
+import io.reactivex.rxjava3.core.Observable;
 
 @Log
 public class GachaServiceImpl implements GachaService {
@@ -26,7 +30,8 @@ public class GachaServiceImpl implements GachaService {
 	public GachaObject getGacha(Rarity rarity, String gachaName) {
 		return gachaDao.getGachaByRarityAndName(rarity, gachaName);
 	}
-	
-	// remove a gacha from the pool
-
+	@Override
+	public List<GachaObject> getGachas() {
+		return gachaDao.getGachas();
+	}
 }

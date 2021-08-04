@@ -1,7 +1,11 @@
 package com.revature.services;
 
+import java.util.List;
+
 import com.revature.beans.GachaObject;
 import com.revature.beans.Rarity;
+
+import io.reactivex.rxjava3.core.Observable;
 
 public interface GachaService {
 
@@ -10,4 +14,6 @@ public interface GachaService {
 	// edit an existing gacha in the pool
 	void updateGacha(GachaObject gacha);
 	GachaObject getGacha(Rarity rarity, String gachaName);
+	List<GachaObject> getGachas();
+	
 }
