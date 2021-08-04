@@ -45,7 +45,7 @@ class Philosopher implements Runnable {
 
 	@Override
 	public void run() {
-		Boolean isEven = (position.equals("two") || position.equals("four")) ? true : false;
+		Boolean isEven = position.equals("two") || position.equals("four");
 		while (true) {
 			// think
 			System.out.println("philosopher " + position + " is thinking.");
