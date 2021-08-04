@@ -15,13 +15,13 @@ public class Philosphers {
 		Chopstick three = new Chopstick("three");
 		Chopstick four = new Chopstick("four");
 		Chopstick five = new Chopstick("five");
-		
-		Philosopher p1 = new Philosopher("one", one, five);
-		Philosopher p2 = new Philosopher("two", two, one);
-		Philosopher p3 = new Philosopher("three", three, two);
-		Philosopher p4 = new Philosopher("four", four, three);
-		Philosopher p5 = new Philosopher("five", five, four);
-		
+
+		Philosopher p1 = new Philosopher("one", one, five, false);
+		Philosopher p2 = new Philosopher("two", two, one, true);
+		Philosopher p3 = new Philosopher("three", three, two, false);
+		Philosopher p4 = new Philosopher("four", four, three, true);
+		Philosopher p5 = new Philosopher("five", five, four, false);
+
 		ExecutorService pool = Executors.newFixedThreadPool(5);
 		pool.execute(p1);
 		pool.execute(p2);
@@ -32,47 +32,69 @@ public class Philosphers {
 }
 
 class Philosopher implements Runnable {
-	
+
 	private String position;
 	private Chopstick left;
 	private Chopstick right;
-	
-	public Philosopher(String position, Chopstick left, Chopstick right) {
+	private Boolean isEven;
+
+	public Philosopher(String position, Chopstick left, Chopstick right, Boolean isEven) {
 		this.position = position;
 		this.left = left;
 		this.right = right;
+		this.isEven = isEven;
 	}
 
 	@Override
 	public void run() {
-		while(true) {
+		while (true) {
 			// think
-			System.out.println("philosopher "+position+" is thinking.");
-			synchronized(left) {
-				System.out.println("philosopher "+position+" has left chopstick.");
-				try {
-					Thread.sleep(1000);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-				synchronized(right) {
-					System.out.println("philosopher "+position+" is eating.");
+			System.out.println("philosopher " + position + " is thinking.");
+			if (isEven) {
+
+				synchronized (left) {
+					System.out.println("philosopher " + position + " has left chopstick.");
 					try {
 						Thread.sleep(1000);
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}
+					synchronized (right) {
+						System.out.println("philosopher " + position + " is eating.");
+						try {
+							Thread.sleep(1000);
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						}
+					}
+				}
+			} else {
+				synchronized (right) {
+					System.out.println("philosopher " + position + " has right chopstick.");
+					try {
+						Thread.sleep(1000);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+					synchronized (left) {
+						System.out.println("philosopher " + position + " is eating.");
+						try {
+							Thread.sleep(1000);
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						}
+					}
 				}
 			}
-			System.out.println("Philosopher "+position+" is done eating for now.");
+			System.out.println("Philosopher " + position + " is done eating for now.");
 		}
 	}
-	
+
 }
 
 class Chopstick {
 	private String position;
-	
+
 	public Chopstick(String position) {
 		this.position = position;
 	}
