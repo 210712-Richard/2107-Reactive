@@ -16,11 +16,11 @@ public class Philosphers {
 		Chopstick four = new Chopstick("four");
 		Chopstick five = new Chopstick("five");
 
-		Philosopher p1 = new Philosopher("one", one, five, false);
-		Philosopher p2 = new Philosopher("two", two, one, true);
-		Philosopher p3 = new Philosopher("three", three, two, false);
-		Philosopher p4 = new Philosopher("four", four, three, true);
-		Philosopher p5 = new Philosopher("five", five, four, false);
+		Philosopher p1 = new Philosopher("one", one, five);
+		Philosopher p2 = new Philosopher("two", two, one);
+		Philosopher p3 = new Philosopher("three", three, two);
+		Philosopher p4 = new Philosopher("four", four, three);
+		Philosopher p5 = new Philosopher("five", five, four);
 
 		ExecutorService pool = Executors.newFixedThreadPool(5);
 		pool.execute(p1);
@@ -36,17 +36,16 @@ class Philosopher implements Runnable {
 	private String position;
 	private Chopstick left;
 	private Chopstick right;
-	private Boolean isEven;
 
-	public Philosopher(String position, Chopstick left, Chopstick right, Boolean isEven) {
+	public Philosopher(String position, Chopstick left, Chopstick right) {
 		this.position = position;
 		this.left = left;
 		this.right = right;
-		this.isEven = isEven;
 	}
 
 	@Override
 	public void run() {
+		Boolean isEven = (position.equals("two") || position.equals("four")) ? true : false;
 		while (true) {
 			// think
 			System.out.println("philosopher " + position + " is thinking.");
