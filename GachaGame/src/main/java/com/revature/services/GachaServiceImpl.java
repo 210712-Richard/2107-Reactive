@@ -2,18 +2,17 @@ package com.revature.services;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.revature.beans.GachaObject;
 import com.revature.beans.Rarity;
 import com.revature.data.GachaDao;
-import com.revature.data.GachaDaoImpl;
-import com.revature.factory.BeanFactory;
-import com.revature.factory.Log;
 
-import io.reactivex.rxjava3.core.Observable;
-
-@Log
+@Service
 public class GachaServiceImpl implements GachaService {
-	private GachaDao gachaDao = (GachaDao) BeanFactory.getFactory().get(GachaDao.class, GachaDaoImpl.class);
+	@Autowired
+	private GachaDao gachaDao;
 	// perform operations on Gachas
 	
 	// create a new gacha for the pool

@@ -10,26 +10,28 @@ import java.util.stream.Collectors;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.BeanFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.revature.beans.GachaObject;
 import com.revature.beans.Rarity;
 import com.revature.beans.User;
 import com.revature.data.GachaDao;
-import com.revature.data.GachaDaoImpl;
 import com.revature.data.OwnedGachaDao;
 import com.revature.data.OwnedGachaDaoImpl;
 import com.revature.data.UserDao;
-import com.revature.data.UserDaoImpl;
-import com.revature.factory.BeanFactory;
-import com.revature.factory.Log;
 
-@Log
+@Service
 public class UserServiceImpl implements UserService {
 	private Logger log = LogManager.getLogger(UserServiceImpl.class);
-	public UserDao ud = (UserDao) BeanFactory.getFactory().get(UserDao.class, UserDaoImpl.class);
-	public GachaDao gachaDao = (GachaDao) BeanFactory.getFactory().get(GachaDao.class, GachaDaoImpl.class);
-
-	public OwnedGachaDao ownedGachaDao = (OwnedGachaDao) BeanFactory.getFactory().get(OwnedGachaDao.class, OwnedGachaDaoImpl.class);
+	@Autowired
+	public UserDao ud;
+	@Autowired
+	public GachaDao gachaDao;
+	@Autowired
+	public OwnedGachaDao ownedGachaDao;
+	
 	private Random r = new Random();
 	
 	@Override

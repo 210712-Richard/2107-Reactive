@@ -6,23 +6,23 @@ import java.util.concurrent.Future;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import com.revature.beans.GachaObject;
 import com.revature.beans.HistoricalCat;
 import com.revature.beans.User;
-import com.revature.factory.BeanFactory;
-import com.revature.factory.Log;
 import com.revature.services.UserService;
-import com.revature.services.UserServiceImpl;
 
 import io.javalin.http.Context;
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
-@Log
+@Component
 public class UserControllerImpl implements UserController {
 	private static Logger log = LogManager.getLogger(UserControllerImpl.class);
-	private UserService us = (UserService) BeanFactory.getFactory().get(UserService.class, UserServiceImpl.class);
+	@Autowired
+	private UserService us;
 	
 	@Override
 	public void login(Context ctx) {

@@ -33,3 +33,9 @@ The IoC container in Spring Core is in charge of creating objects and resolving 
 
 **Spring Bean**: Any object managed by the IoC Container.
 
+#### Scopes of a Spring Bean
+
+* `singleton`: -default- ApplicationContext makes this bean on startup and never makes a new one.
+* `prototype`: ApplicationContext makes the bean when it's asked for one and makes a new one every time.
+* `request`: ApplicationContext makes the bean when the framework receives an http request and retains that bean until the response has been sent.
+* `session`: ApplicationContext makes the bean when the framework creates an httpSession and retains the bean until that session is invalidated.

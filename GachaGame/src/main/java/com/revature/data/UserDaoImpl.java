@@ -5,6 +5,9 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+
 import com.datastax.oss.driver.api.core.CqlSession;
 import com.datastax.oss.driver.api.core.DefaultConsistencyLevel;
 import com.datastax.oss.driver.api.core.cql.BoundStatement;
@@ -14,28 +17,14 @@ import com.datastax.oss.driver.api.core.cql.SimpleStatement;
 import com.datastax.oss.driver.api.core.cql.SimpleStatementBuilder;
 import com.revature.beans.User;
 import com.revature.beans.UserType;
-import com.revature.factory.Log;
-import com.revature.util.CassandraUtil;
 
-@Log
+@Repository
 public class UserDaoImpl implements UserDao {
-	private CqlSession session = CassandraUtil.getInstance().getSession();
+	@Autowired
+	private CqlSession session;
 
 	@Override
 	public void addUser(User u) {
-		
-		// username = "hello';--"
-		// SimpleStatement leaves us vulnerable to CQL injection and also it's hard to read and write.
-//		StringBuilder sb = new StringBuilder("Insert into user ")
-//				.append("(username, type, email, currency, birthday, lastCheckIn)")
-//				.append(" values ('"+u.getUsername()+"', '"+u.getType()+"', '"
-//				+u.getEmail()+"', "+u.getCurrency()+", '"+u.getBirthday()
-//				+"', '"+u.getLastCheckIn()+"');");
-//		System.out.println(sb.toString());
-//		SimpleStatement s = new SimpleStatementBuilder(sb.toString())
-//				.setConsistencyLevel(DefaultConsistencyLevel.LOCAL_QUORUM).build();
-		
-		// Bound Statement will guard against CQL injection and is just a lot nicer
 		String query = "Insert into user (username, type, email, currency, birthday, lastCheckIn) values (?, ?, ?, ?, ?, ?);";
 		SimpleStatement s = new SimpleStatementBuilder(query).setConsistencyLevel(DefaultConsistencyLevel.LOCAL_QUORUM).build();
 		BoundStatement bound = session.prepare(s)

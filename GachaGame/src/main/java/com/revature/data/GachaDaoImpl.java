@@ -3,6 +3,9 @@ package com.revature.data;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+
 import com.datastax.oss.driver.api.core.CqlSession;
 import com.datastax.oss.driver.api.core.DefaultConsistencyLevel;
 import com.datastax.oss.driver.api.core.cql.BoundStatement;
@@ -19,12 +22,11 @@ import com.revature.beans.Attributes;
 import com.revature.beans.GachaObject;
 import com.revature.beans.HistoricalCat;
 import com.revature.beans.Rarity;
-import com.revature.factory.Log;
-import com.revature.util.CassandraUtil;
 
-@Log
+@Repository
 public class GachaDaoImpl implements GachaDao {
-	private CqlSession session = CassandraUtil.getInstance().getSession();
+	@Autowired
+	private CqlSession session;
 	private static final TupleType STATS_TUPLE = DataTypes.tupleOf(DataTypes.INT, DataTypes.INT, DataTypes.INT);
 	
 	@Override

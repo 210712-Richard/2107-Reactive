@@ -1,10 +1,10 @@
-package com.revature.core;
+package com.revature;
 
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Component;
 
-@Configuration
+@Component
 @ComponentScan("com.revature")
 public class AppConfig {
-	
+
 }

@@ -4,24 +4,23 @@ import java.io.InputStream;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import com.revature.beans.GachaObject;
 import com.revature.beans.HistoricalCat;
 import com.revature.beans.Rarity;
 import com.revature.beans.User;
 import com.revature.beans.UserType;
-import com.revature.factory.BeanFactory;
-import com.revature.factory.Log;
 import com.revature.services.GachaService;
-import com.revature.services.GachaServiceImpl;
 import com.revature.util.S3Util;
 
 import io.javalin.http.Context;
 
-@Log
+@Component
 public class GachaControllerImpl implements GachaController {
-	private GachaService gachaService = (GachaService) BeanFactory.getFactory().get(GachaService.class,
-			GachaServiceImpl.class);
+	@Autowired
+	private GachaService gachaService;
 	private static Logger log = LogManager.getLogger(GachaControllerImpl.class);
 
 	// Group 3 - branch: new-gacha

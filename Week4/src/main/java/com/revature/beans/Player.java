@@ -1,9 +1,11 @@
 package com.revature.beans;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 @Component // registers Player as a Spring Bean
+//@Scope("prototype")
 public class Player {
 	@Autowired // Ball is a dependency that the IoC Container needs to satisfy
 	private Ball ball;
@@ -11,7 +13,7 @@ public class Player {
 	private String team;
 	
 	public Player() {
-		System.out.println("Player Constructor Called.");
+		//System.out.println("Player Constructor Called.");
 	}
 
 	public Ball getBall() {
