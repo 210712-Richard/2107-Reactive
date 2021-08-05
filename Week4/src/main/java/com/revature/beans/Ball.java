@@ -1,9 +1,8 @@
 package com.revature.beans;
 
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-@Component
+@Component("trevor")
 //@Scope("prototype")
 public class Ball {
 	

@@ -14,7 +14,7 @@ public class Lifecycle {
 		ctx.refresh();
 		Bean b = ctx.getBean(Bean.class);
 		System.out.println("Phase Four: Actually using it");
-		System.out.println("In Use: "+b);
+		System.out.println("10. In Use: "+b);
 		ctx.close();
 	}
 }

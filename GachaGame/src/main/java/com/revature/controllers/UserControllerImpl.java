@@ -26,7 +26,6 @@ public class UserControllerImpl implements UserController {
 	
 	@Override
 	public void login(Context ctx) {
-		log.trace("Login method called");
 		log.debug(ctx.body());
 		// Try to use a JSON Marshaller to create an object of this type.
 		// Javalin does not come with a JSON Marshaller but prefers Jackson. You could also use GSON

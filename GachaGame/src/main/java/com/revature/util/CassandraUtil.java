@@ -13,7 +13,7 @@ public class CassandraUtil {
 	private static final Logger log = LogManager.getLogger(CassandraUtil.class);
 	
 	@Bean
-	public CqlSession getSession() {
+	public CqlSession session() {
 		CqlSession session = null;
 		log.trace("Establishing connection with Cassandra");
 		DriverConfigLoader loader = DriverConfigLoader.fromClasspath("application.conf");

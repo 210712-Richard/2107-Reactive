@@ -13,7 +13,7 @@ import com.revature.beans.Rarity;
 import com.revature.beans.User;
 import com.revature.beans.UserType;
 import com.revature.services.GachaService;
-import com.revature.util.S3Util;
+import com.revature.services.S3Service;
 
 import io.javalin.http.Context;
 
@@ -21,6 +21,8 @@ import io.javalin.http.Context;
 public class GachaControllerImpl implements GachaController {
 	@Autowired
 	private GachaService gachaService;
+	@Autowired
+	private S3Service s3;
 	private static Logger log = LogManager.getLogger(GachaControllerImpl.class);
 
 	// Group 3 - branch: new-gacha
@@ -103,7 +105,7 @@ public class GachaControllerImpl implements GachaController {
 			return;
 		}
 		String key = gachaName+"."+filetype;
-		S3Util.getInstance().uploadToBucket(key, ctx.bodyAsBytes());
+		s3.uploadToBucket(key, ctx.bodyAsBytes());
 		gacha.setPictureUrl(key);
 		gachaService.updateGacha(gacha);
 		ctx.json(gacha);
@@ -129,7 +131,7 @@ public class GachaControllerImpl implements GachaController {
 			return;
 		}
 		try {
-			InputStream picture = S3Util.getInstance().getObject(gacha.getPictureUrl());
+			InputStream picture = s3.getObject(gacha.getPictureUrl());
 			ctx.result(picture);
 		} catch (Exception e) {
 			ctx.status(500);

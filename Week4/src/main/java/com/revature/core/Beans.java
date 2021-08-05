@@ -9,7 +9,22 @@ public class Beans {
 	public static void main(String[] args) {
 		//tradition();
 		//spring();
-		scopes();
+		//scopes();
+		wiringTypes();
+	}
+
+	private static void wiringTypes() {
+		AnnotationConfigApplicationContext ctx = new AnnotationConfigApplicationContext();
+		ctx.register(AppConfig.class);
+		ctx.refresh();
+		
+		// byName
+		System.out.println(ctx.getBean("player"));
+		System.out.println(ctx.getBean("trevor"));
+		
+		// byType
+		System.out.println(ctx.getBean(Player.class));
+		System.out.println(ctx.getBean(Ball.class));
 	}
 
 	private static void scopes() {

@@ -20,7 +20,7 @@ public class JavalinConfig {
 	@Autowired
 	private UserController uc;
 	@Bean
-	public Javalin getJavalin() {
+	public Javalin javalin() {
 
 		// Set up Jackson to serialize LocalDates and LocalDateTimes
 		ObjectMapper jackson = new ObjectMapper();
