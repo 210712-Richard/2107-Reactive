@@ -5,9 +5,14 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.when;
 
 import java.time.LocalDate;
 import java.time.Period;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -16,6 +21,7 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 
 import com.revature.beans.GachaObject;
+import com.revature.beans.HistoricalCat;
 import com.revature.beans.User;
 import com.revature.beans.UserType;
 import com.revature.data.GachaDao;
@@ -110,5 +116,35 @@ public class UserServiceTest {
 	public void testHasCheckedInReturnsTrue() {
 		u.setLastCheckIn(LocalDate.now());
 		assertTrue(service.hasCheckedIn(u));
+	}
+	
+	@Test
+	public void testLogIn() {
+		// input: Name
+		// outputs: User with that name or null if none found.
+		//when(listMock.add(anyString())).thenReturn(false);
+		String username = "Richard";
+		User u = new User();
+		u.setUsername(username);
+		Mockito.when(ud.getUser(username)).thenReturn(u);
+		List<UUID> list = new ArrayList<UUID>();
+		UUID id = UUID.randomUUID();
+		list.add(id);
+		when(ud.getUserInventory(username)).thenReturn(list);
+		HistoricalCat hist = new HistoricalCat();
+		when(ogd.getGachaById(id)).thenReturn(hist);
+		User recievedUser = service.login(username);
+		
+		// 1. Did we receive our user?
+		assertEquals(u, recievedUser, "We receive the correct user");
+		// 2. Calls ud.getUser();
+		Mockito.verify(ud).getUser(username);
+		// 3. Calls ud.getUserInventory();
+		Mockito.verify(ud).getUserInventory(username);
+		// 4. Calls ownedGachaDao.getGachaById(id) for each
+		//		id in the list returned by getUserInventory
+		Mockito.verify(ogd, times(1)).getGachaById(id);
+		// 5. Is our cat inside the user?
+		assertEquals(hist, recievedUser.getInventory().get(0));
 	}
 }
