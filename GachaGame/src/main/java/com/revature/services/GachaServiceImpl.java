@@ -11,8 +11,13 @@ import com.revature.data.GachaDao;
 
 @Service
 public class GachaServiceImpl implements GachaService {
-	@Autowired
 	private GachaDao gachaDao;
+
+	@Autowired
+	public GachaServiceImpl(GachaDao gachaDao) {
+		super();
+		this.gachaDao = gachaDao;
+	}
 	// perform operations on Gachas
 	
 	// create a new gacha for the pool

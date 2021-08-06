@@ -13,19 +13,25 @@ import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
 @Service
 public class S3ServiceImpl implements S3Service{
-	@Autowired
 	private S3Client s3;
-	@Value("${BUCKET_NAME}")
-	public String BUCKET_NAME;
+	public String bucketName;
 	
+	
+	@Autowired
+	public S3ServiceImpl(S3Client s3, @Value("${BUCKET_NAME}") String name) {
+		super();
+		this.s3 = s3;
+		bucketName = name;
+	}
+
 	// upload to the bucket
 	public void uploadToBucket(String key, byte[] file) {
-		s3.putObject(PutObjectRequest.builder().bucket(BUCKET_NAME).key(key).build(), RequestBody.fromBytes(file));
+		s3.putObject(PutObjectRequest.builder().bucket(bucketName).key(key).build(), RequestBody.fromBytes(file));
 	}
 
 	// download from the bucket
 	public InputStream getObject(String key) {
-		InputStream object = s3.getObject(GetObjectRequest.builder().bucket(BUCKET_NAME).key(key).build());
+		InputStream object = s3.getObject(GetObjectRequest.builder().bucket(bucketName).key(key).build());
 		return object;
 	}
 }

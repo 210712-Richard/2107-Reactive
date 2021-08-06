@@ -47,7 +47,7 @@ The IoC container in Spring Core is in charge of creating objects and resolving 
   * When placed over a constructor, Spring will perform constructor injection by satisfying the parameters of the constructor
   * When placed over a setter, Spring will perform setter injection by satisfying the parameters of the setter.
 * `@Scope`: Species the lifetime of your Spring Bean
-* `@Bean`: Registers the return value of the method as a Spring Bean
+* `@Bean`: Registers the return value of the method as a Spring Bean (with the same name as the method)
 
 ##### Stereotypes
 
@@ -64,7 +64,7 @@ In Spring, a stereotype is an annotation that specifies that a Bean should be ma
 
 #### Bean Wiring
 In Spring, we can "wire" our Beans in several different ways.
-1. `no` - No autowring, you explicitly reference a bean for wiring. (You do this in XML)
+1. `no` - No autowiring, you explicitly reference a bean for wiring. (You do this in XML)
 2. `byName`: will look for a bean matching the name you specify.
 3. `byType`: Will look for a bean of the type that matches. If there is more than one, an exception is thrown.
 4. `constructor`: Will look for a bean that matches the parameters of the constructor, if there is more than one, an exception is thrown.

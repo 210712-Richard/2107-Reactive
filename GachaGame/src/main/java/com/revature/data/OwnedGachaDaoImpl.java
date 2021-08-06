@@ -25,9 +25,15 @@ import com.revature.beans.Rarity;
 
 @Repository
 public class OwnedGachaDaoImpl implements OwnedGachaDao {
-	@Autowired
-	private CqlSession session;
 	private static final TupleType STATS_TUPLE = DataTypes.tupleOf(DataTypes.INT, DataTypes.INT, DataTypes.INT);
+	
+	private CqlSession session;
+
+	@Autowired
+	public OwnedGachaDaoImpl(CqlSession session) {
+		super();
+		this.session = session;
+	}
 
 	@Override
 	public UUID addGacha(GachaObject gacha) {

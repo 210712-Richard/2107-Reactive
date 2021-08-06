@@ -7,11 +7,11 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.revature.aspects.GameMaster;
+import com.revature.aspects.LoggedIn;
 import com.revature.beans.GachaObject;
 import com.revature.beans.HistoricalCat;
 import com.revature.beans.Rarity;
-import com.revature.beans.User;
-import com.revature.beans.UserType;
 import com.revature.services.GachaService;
 import com.revature.services.S3Service;
 
@@ -19,26 +19,20 @@ import io.javalin.http.Context;
 
 @Component
 public class GachaControllerImpl implements GachaController {
-	@Autowired
 	private GachaService gachaService;
-	@Autowired
 	private S3Service s3;
+	
 	private static Logger log = LogManager.getLogger(GachaControllerImpl.class);
-
+	
+	@Autowired // constructor injection. :D
+	public GachaControllerImpl(GachaService g, S3Service s){
+		this.gachaService = g;
+		this.s3 = s;
+	}
 	// Group 3 - branch: new-gacha
+	@GameMaster
 	public void addGacha(Context ctx) {
 
-		User loggedUser = ctx.sessionAttribute("loggedUser");
-		// Checking if logged in
-		if (loggedUser == null) {
-			ctx.status(401);
-			return;
-		}
-		// Check that we're an admin
-		if (!loggedUser.getType().equals(UserType.GAME_MASTER)) {
-			ctx.status(403);
-			return;
-		}
 		// Get the gacha out of the body of the request
 		GachaObject ga = ctx.bodyAsClass(HistoricalCat.class);
 		log.debug(ga);
@@ -49,18 +43,8 @@ public class GachaControllerImpl implements GachaController {
 		ctx.json(ga);
 	}
 
+	@GameMaster
 	public void updateGacha(Context ctx) {
-		User loggedUser = ctx.sessionAttribute("loggedUser");
-		// Checking if logged in
-		if (loggedUser == null) {
-			ctx.status(401);
-			return;
-		}
-		// Check that we're an admin
-		if (!loggedUser.getType().equals(UserType.GAME_MASTER)) {
-			ctx.status(403);
-			return;
-		}
 
 		// Get the gacha out of the body of the request
 		GachaObject ga = ctx.bodyAsClass(HistoricalCat.class);
@@ -74,19 +58,11 @@ public class GachaControllerImpl implements GachaController {
 
 	}
 
+	@GameMaster
 	@Override
 	public void uploadPicture(Context ctx) {
-		User loggedUser = ctx.sessionAttribute("loggedUser");
-		// Checking if logged in
-		if (loggedUser == null) {
-			ctx.status(401);
-			return;
-		}
+		
 		// Check that we're an admin
-		if (!loggedUser.getType().equals(UserType.GAME_MASTER)) {
-			ctx.status(403);
-			return;
-		}
 		Rarity rarity = Rarity.valueOf(ctx.pathParam("gachaRarity"));
 		if(rarity == null) {
 			ctx.status(400);
@@ -111,14 +87,10 @@ public class GachaControllerImpl implements GachaController {
 		ctx.json(gacha);
 	}
 
+	@LoggedIn
 	@Override
 	public void getPicture(Context ctx) {
-		User loggedUser = ctx.sessionAttribute("loggedUser");
 		// Checking if logged in
-		if (loggedUser == null) {
-			ctx.status(401);
-			return;
-		}
 		Rarity rarity = Rarity.valueOf(ctx.pathParam("gachaRarity"));
 		if(rarity == null) {
 			ctx.status(400);

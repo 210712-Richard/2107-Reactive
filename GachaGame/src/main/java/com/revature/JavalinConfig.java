@@ -15,10 +15,15 @@ import io.javalin.plugin.json.JavalinJackson;
 
 @Configuration
 public class JavalinConfig {
-	@Autowired
 	private GachaController gachaController;
+	private UserController userController;
+
 	@Autowired
-	private UserController uc;
+	public JavalinConfig(GachaController g, UserController u) {
+		this.gachaController = g;
+		this.userController = u;
+	}
+	
 	@Bean
 	public Javalin javalin() {
 
@@ -45,27 +50,27 @@ public class JavalinConfig {
 		// object::method <- Reference to a method as a function we can pass to a method
 
 		// As a user, I can log in.
-		app.post("/users", uc::login);
+		app.post("/users", userController::login);
 		// As a user, I can register for a player account.
-		app.put("/users/:username", uc::register);
+		app.put("/users/:username", userController::register);
 		// As a user, I can log out.
-		app.delete("/users", uc::logout);
+		app.delete("/users", userController::logout);
 		// As a player, I can obtain currency.
-		app.put("/users/:username/lastCheckIn", uc::dailyCheckIn);
+		app.put("/users/:username/lastCheckIn", userController::dailyCheckIn);
 		// As a player, I can view my currency.
-		app.get("/users/:username/currency", uc::getCurrency);
+		app.get("/users/:username/currency", userController::getCurrency);
 
 		// As a player, I can summon a hero
-		app.post("/users/:username/inventory", uc::summon);
+		app.post("/users/:username/inventory", userController::summon);
 
 		// As a player, I can level up my gacha
-		app.put("/users/:username/inventory/:gachaId", uc::level);
+		app.put("/users/:username/inventory/:gachaId", userController::level);
 
 		// As a player, I can send my gacha on a mission
-		app.put("/users/:username/inventory/:gachaId/quest", uc::sendOnMission);
+		app.put("/users/:username/inventory/:gachaId/quest", userController::sendOnMission);
 
 		// As a player, I can view my gachas
-		app.get("/users/:username/inventory", uc::viewGachas);
+		app.get("/users/:username/inventory", userController::viewGachas);
 
 		// As an admin, I can add an Gacha object
 		app.post("/gachas", gachaController::addGacha);

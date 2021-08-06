@@ -8,12 +8,15 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 @Component
 @Aspect
 public class LoggingAspect {
 	@Around("everything()")
+	@Order(Ordered.HIGHEST_PRECEDENCE)
 	public Object log(ProceedingJoinPoint pjp) throws Throwable {
 		Object result = null;
 		Logger log = LogManager.getLogger(pjp.getTarget().getClass()); // get a logger for the class of the method being called.

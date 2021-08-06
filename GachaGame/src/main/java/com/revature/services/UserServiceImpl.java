@@ -10,7 +10,6 @@ import java.util.stream.Collectors;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,21 +18,27 @@ import com.revature.beans.Rarity;
 import com.revature.beans.User;
 import com.revature.data.GachaDao;
 import com.revature.data.OwnedGachaDao;
-import com.revature.data.OwnedGachaDaoImpl;
 import com.revature.data.UserDao;
 
 @Service
 public class UserServiceImpl implements UserService {
-	private Logger log = LogManager.getLogger(UserServiceImpl.class);
-	@Autowired
-	public UserDao ud;
-	@Autowired
-	public GachaDao gachaDao;
-	@Autowired
-	public OwnedGachaDao ownedGachaDao;
+	private static Logger log = LogManager.getLogger(UserServiceImpl.class);
 	
-	private Random r = new Random();
+	private UserDao ud;
+	private GachaDao gachaDao;
+	private OwnedGachaDao ownedGachaDao;
 	
+	private Random r;
+	
+	@Autowired
+	public UserServiceImpl(UserDao ud, GachaDao gachaDao, OwnedGachaDao ownedGachaDao) {
+		super();
+		this.ud = ud;
+		this.gachaDao = gachaDao;
+		this.ownedGachaDao = ownedGachaDao;
+		this.r = new Random();
+	}
+
 	@Override
 	public User login(String name) {
 		User u = ud.getUser(name);

@@ -18,10 +18,15 @@ import org.mockito.Mockito;
 import com.revature.beans.GachaObject;
 import com.revature.beans.User;
 import com.revature.beans.UserType;
+import com.revature.data.GachaDao;
+import com.revature.data.OwnedGachaDao;
 import com.revature.data.UserDao;
 
 public class UserServiceTest {
 	private static UserServiceImpl service;
+	private static UserDao ud;
+	private static GachaDao gd;
+	private static OwnedGachaDao ogd;
 	private static User u;
 	
 	@BeforeAll // Specifies that this static method will be run before any tests
@@ -32,10 +37,12 @@ public class UserServiceTest {
 	
 	@BeforeEach // Specifies a method that is to be run before each test
 	public void setUpTests() {
-		service = new UserServiceImpl(); // create a new userService for every test to maximize isolation
+		ud = Mockito.mock(UserDao.class);
+		gd = Mockito.mock(GachaDao.class);
+		ogd = Mockito.mock(OwnedGachaDao.class);
+		service = new UserServiceImpl(ud, gd, ogd); // create a new userService for every test to maximize isolation
 		u.setLastCheckIn(LocalDate.of(2021, 1,1));
 		u.setCurrency(500l);
-		service.ud = Mockito.mock(UserDao.class);
 	}
 	
 	@Test
@@ -49,7 +56,7 @@ public class UserServiceTest {
 		ArgumentCaptor<User> captor = ArgumentCaptor.forClass(User.class);
 
 		// ud.addUser() was called with our User as an argument.
-		Mockito.verify(service.ud).addUser(captor.capture());
+		Mockito.verify(ud).addUser(captor.capture());
 
 		// ud.writeToFile() was called.
 		//Mockito.verify(service.ud).writeToFile();

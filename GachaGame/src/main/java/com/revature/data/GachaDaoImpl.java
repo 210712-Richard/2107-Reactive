@@ -25,10 +25,15 @@ import com.revature.beans.Rarity;
 
 @Repository
 public class GachaDaoImpl implements GachaDao {
-	@Autowired
 	private CqlSession session;
 	private static final TupleType STATS_TUPLE = DataTypes.tupleOf(DataTypes.INT, DataTypes.INT, DataTypes.INT);
 	
+	@Autowired
+	public GachaDaoImpl(CqlSession session) {
+		super();
+		this.session = session;
+	}
+
 	@Override
 	public void addGacha(GachaObject gacha) {
 		String query = "Insert into gacha (rarity, stats, name, ability, pictureUrl) values (?, ?, ?, ?, ?);";

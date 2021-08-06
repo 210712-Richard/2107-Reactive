@@ -20,8 +20,14 @@ import com.revature.beans.UserType;
 
 @Repository
 public class UserDaoImpl implements UserDao {
-	@Autowired
+	
 	private CqlSession session;
+	
+	@Autowired
+	public UserDaoImpl(CqlSession session) {
+		super();
+		this.session = session;
+	}
 
 	@Override
 	public void addUser(User u) {

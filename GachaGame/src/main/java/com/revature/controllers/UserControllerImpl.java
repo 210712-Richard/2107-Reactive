@@ -9,6 +9,8 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.revature.aspects.CorrectUser;
+import com.revature.aspects.LoggedIn;
 import com.revature.beans.GachaObject;
 import com.revature.beans.HistoricalCat;
 import com.revature.beans.User;
@@ -21,9 +23,15 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 @Component
 public class UserControllerImpl implements UserController {
 	private static Logger log = LogManager.getLogger(UserControllerImpl.class);
-	@Autowired
+
 	private UserService us;
-	
+
+	@Autowired
+	public UserControllerImpl(UserService us) {
+		super();
+		this.us = us;
+	}
+
 	@Override
 	public void login(Context ctx) {
 		log.debug(ctx.body());
@@ -50,35 +58,27 @@ public class UserControllerImpl implements UserController {
 		ctx.status(401);
 	}
 	
+	@CorrectUser
 	@Override
 	public void getCurrency(Context ctx) {
-		String username = ctx.pathParam("username");
 		User loggedUser = (User) ctx.sessionAttribute("loggedUser");
-		// if we aren't logged in or our username is different than the logged in username
-		if(loggedUser == null || !loggedUser.getUsername().equals(username)) {
-			ctx.status(403);
-			return;
-		}
-		// otherwise we're golden
+
 		ctx.json(loggedUser.getCurrency());
 	}
 	
+	@LoggedIn
 	@Override
 	public void logout(Context ctx) {
 		ctx.req.getSession().invalidate();
 		ctx.status(204);
 	}
 	
+	@CorrectUser
 	@Override
 	public void dailyCheckIn(Context ctx) {
 		// if we aren't logged in, how can we check in?
 		User loggedUser = ctx.sessionAttribute("loggedUser");
-		log.trace("daily check in to "+loggedUser);
-		String username = ctx.pathParam("username");
-		if(loggedUser == null || !loggedUser.getUsername().equals(username)) {
-			ctx.status(403);
-			return;
-		}
+
 		if(us.hasCheckedIn(loggedUser)) {
 			// if we have already checked in, we can't check in again
 			ctx.status(429);
@@ -105,15 +105,12 @@ public class UserControllerImpl implements UserController {
 		
 	}
 	
+	@CorrectUser
 	@Override
 	public void summon(Context ctx) {
 		// if we aren't logged in, how can we summon?
 		User loggedUser = ctx.sessionAttribute("loggedUser");
-		String username = ctx.pathParam("username");
-		if(loggedUser == null || !loggedUser.getUsername().equals(username)) {
-			ctx.status(403);
-			return;
-		}
+		
 		GachaObject summoned = us.summon(loggedUser);
 		if(summoned == null) {
 			ctx.status(402);
@@ -124,15 +121,11 @@ public class UserControllerImpl implements UserController {
 	}
 	
 	// Group 1 - branch: level-up
+	@CorrectUser
 	@Override
 	public void level(Context ctx) {
 		// Level up the gacha specified in the path parameter
 		User loggedUser = ctx.sessionAttribute("loggedUser");
-		String username = ctx.pathParam("username");
-		if(loggedUser == null || !loggedUser.getUsername().equals(username)) {
-			ctx.status(403);
-			return;
-		}
 		UUID predatorId = UUID.fromString(ctx.pathParam("gachaId"));
 		GachaObject predator = loggedUser.getInventory()
 			.stream()
@@ -151,30 +144,23 @@ public class UserControllerImpl implements UserController {
 	}
 	
 	// Group 2 - branch: view-gacha
+	@CorrectUser
 	@Override
 	public void viewGachas(Context ctx) {
 		
 		
 		//Check that the user is logged in
 		User loggedUser = ctx.sessionAttribute("loggedUser");
-		String username = ctx.pathParam("username");
-		if(loggedUser == null || !loggedUser.getUsername().equals(username)) {
-			ctx.status(403);
-			return;
-		}
 		
 		// send back the loggedin User's inventory.
 		ctx.json(loggedUser.getInventory());
 	}
 
+	@CorrectUser
 	@Override
 	public void sendOnMission(Context ctx) {
 		User loggedUser = ctx.sessionAttribute("loggedUser");
-		String username = ctx.pathParam("username");
-		if(loggedUser == null || !loggedUser.getUsername().equals(username)) {
-			ctx.status(403);
-			return;
-		}
+		
 		GachaObject questant = loggedUser
 				.getInventory()
 				.stream()
