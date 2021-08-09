@@ -11,13 +11,13 @@ import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.GetObjectRequest;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
-//@Service
+@Service
 public class S3ServiceImpl implements S3Service{
 	private S3Client s3;
 	public String bucketName;
 	
 	
-	//@Autowired
+	@Autowired
 	public S3ServiceImpl(S3Client s3, @Value("${BUCKET_NAME}") String name) {
 		super();
 		this.s3 = s3;

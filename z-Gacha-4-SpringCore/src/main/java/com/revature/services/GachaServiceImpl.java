@@ -9,11 +9,11 @@ import com.revature.beans.GachaObject;
 import com.revature.beans.Rarity;
 import com.revature.data.GachaDao;
 
-//@Service
+@Service
 public class GachaServiceImpl implements GachaService {
 	private GachaDao gachaDao;
 
-	//@Autowired
+	@Autowired
 	public GachaServiceImpl(GachaDao gachaDao) {
 		super();
 		this.gachaDao = gachaDao;

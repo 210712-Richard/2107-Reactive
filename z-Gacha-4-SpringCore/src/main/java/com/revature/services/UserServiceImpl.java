@@ -20,7 +20,7 @@ import com.revature.data.GachaDao;
 import com.revature.data.OwnedGachaDao;
 import com.revature.data.UserDao;
 
-//@Service
+@Service
 public class UserServiceImpl implements UserService {
 	private static Logger log = LogManager.getLogger(UserServiceImpl.class);
 	
@@ -30,7 +30,7 @@ public class UserServiceImpl implements UserService {
 	
 	private Random r;
 	
-	//@Autowired
+	@Autowired
 	public UserServiceImpl(UserDao ud, GachaDao gachaDao, OwnedGachaDao ownedGachaDao) {
 		super();
 		this.ud = ud;

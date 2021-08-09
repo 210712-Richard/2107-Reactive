@@ -5,6 +5,8 @@ import java.util.List;
 import com.revature.beans.GachaObject;
 import com.revature.beans.Rarity;
 
+import io.reactivex.rxjava3.core.Observable;
+
 public interface GachaService {
 
 	// create a new gacha for the pool
