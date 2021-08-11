@@ -10,6 +10,7 @@ import java.util.concurrent.Future;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -61,15 +62,15 @@ public class UserController {
 	}
 
 	// As a user, I can register for a player account.
-	@PutMapping("{username}")
-	public ResponseEntity<User> register(@RequestBody User u, @PathVariable("username") String name) {
+	@PutMapping(value="{username}", produces=MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Object> register(@RequestBody User u, @PathVariable("username") String name) {
 		// check to see if that username is available
 		if (userService.checkAvailability(name)) {
 			// actually register the user
 			User created = userService.register(name, u.getEmail(), u.getBirthday());
 			return ResponseEntity.ok(created);
 		} else {
-			return ResponseEntity.status(409).build();
+			return ResponseEntity.status(409).contentType(MediaType.TEXT_HTML).body("<html><body><div>CONFLICT</div></body></html>");
 		}
 	}
 
