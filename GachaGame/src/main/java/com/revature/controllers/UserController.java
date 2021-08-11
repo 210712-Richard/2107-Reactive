@@ -1,6 +1,10 @@
 package com.revature.controllers;
 
 import java.util.List;
+import java.util.Observable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +21,7 @@ import org.springframework.web.server.WebSession;
 import com.revature.beans.GachaObject;
 import com.revature.beans.User;
 import com.revature.services.UserService;
+
 
 @RestController
 @RequestMapping("/users")
@@ -116,6 +121,29 @@ public class UserController {
 	// ROOM 4
 	// As a player, I can send my gacha on a mission
 	//app.put("/users/:username/inventory/:gachaId/quest", userController::sendOnMission);
+	
+	@PutMapping("{username}/inventory/{gachaId}/quest")
+	public ResponseEntity<Long> sendOnMission(@PathVariable("username") String name, @PathVariable("gachaId") String id, WebSession session){
+		User loggedUser = (User) session.getAttribute("loggedUser");
+		if(loggedUser == null) {
+			return ResponseEntity.status(401).build();
+		}
+		if(!loggedUser.getUsername().equals(name)) {
+			return ResponseEntity.status(403).build();
+		}
+		GachaObject go = loggedUser.getInventory().stream().filter(p-> p.getId().toString().equals(id)).findFirst().orElse(null);
+		if(go == null) {
+			return ResponseEntity.status(400).build();
+		}
+		Future<Long> receivedCurrency = Executors.newCachedThreadPool().submit(go.getAbility());
 
+		try {
+			loggedUser.setCurrency(loggedUser.getCurrency()+receivedCurrency.get());
+		} catch (InterruptedException | ExecutionException e) {
+			return ResponseEntity.status(400).build();
+		}
+		userService.updateUser(loggedUser);
+		return ResponseEntity.status(200).build();
+	}
 
 }
