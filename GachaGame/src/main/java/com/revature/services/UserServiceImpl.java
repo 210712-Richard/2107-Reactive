@@ -5,6 +5,7 @@ import java.time.Period;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.apache.logging.log4j.LogManager;
@@ -37,8 +38,8 @@ public class UserServiceImpl implements UserService {
 	public UserServiceImpl(UserDao ud, GachaDao gachaDao, OwnedGachaDao ownedGachaDao) {
 		super();
 		this.ud = ud;
-		//this.gachaDao = gachaDao;
-		//this.ownedGachaDao = ownedGachaDao;
+		this.gachaDao = gachaDao;
+		this.ownedGachaDao = ownedGachaDao;
 		this.r = new Random();
 	}
 
@@ -47,7 +48,7 @@ public class UserServiceImpl implements UserService {
 		UserDTO databaseUser = ud.findById(name).orElse(null);
 		
 		List<GachaObject> inventory = databaseUser.getInventory().stream()
-				.map(id -> ownedGachaDao.findById(id).get().getCat())
+				.map(id -> ownedGachaDao.findByUuid(id).get().getCat())
 				.collect(Collectors.toList());
 		User user = databaseUser.getUser();
 		user.setInventory(inventory);
@@ -133,8 +134,8 @@ public class UserServiceImpl implements UserService {
 		List<HistoricalCatDTO> rarityObjects = gachaDao.findByRarity(Rarity.getRarity(chance));
 		Collections.shuffle(rarityObjects);
 		summonedObject = rarityObjects.get(0).getHistoricalCat();
+		summonedObject.setId(UUID.randomUUID());
 		ownedGachaDao.save(new OwnedHistoricalCatDTO(summonedObject));
-		summonedObject.setId(summonedObject.getId());
 		
 		// 4. Update the user's currency
 		summoner.setCurrency(summoner.getCurrency() - GachaObject.SUMMON_COST);
