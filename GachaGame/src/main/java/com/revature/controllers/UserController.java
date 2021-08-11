@@ -111,7 +111,26 @@ public class UserController {
 			
 	// ROOM 3
 	// As a player, I can level up my gacha
-	//app.put("/users/:username/inventory/:gachaId", userController::level);
+	@PutMapping("{username}/inventory/{gachId}")
+	public ResponseEntity<GachaObject> level(@PathVariable("username") String name, WebSession session, @PathVariable("gachaId") String gachaId, @RequestBody HistoricalCat food){
+		User loggedUser = (User) session.getAttribute("loggedUser");
+		if (loggedUser == null) {
+			return ResponseEntity.status(401).build();
+		}
+		if (!loggedUser.getUsername().equals(name)) {
+			return ResponseEntity.status(403).build();
+		}
+		HistoricalCat cat = (HistoricalCat) gachaService.getGachas().stream()
+				.filter((gacha) -> gacha.getId().equals(UUID.fromString(gachaId)))
+				.findFirst()
+				.orElse(null);
+		userService.levelGacha(loggedUser, cat, food);
+		if (cat == null) {
+			return ResponseEntity.status(404).build();
+		}
+		return ResponseEntity.ok(cat);
+	}
+
 
 	// ROOM 4
 	// As a player, I can send my gacha on a mission
