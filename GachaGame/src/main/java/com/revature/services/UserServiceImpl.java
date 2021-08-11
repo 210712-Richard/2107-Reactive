@@ -5,7 +5,6 @@ import java.time.Period;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.apache.logging.log4j.LogManager;
@@ -14,13 +13,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.revature.beans.GachaObject;
+import com.revature.beans.HistoricalCat;
 import com.revature.beans.Rarity;
 import com.revature.beans.User;
 import com.revature.data.GachaDao;
 import com.revature.data.OwnedGachaDao;
 import com.revature.data.UserDao;
+import com.revature.dto.HistoricalCatDTO;
+import com.revature.dto.OwnedHistoricalCatDTO;
+import com.revature.dto.UserDTO;
 
-//@Service
+@Service
 public class UserServiceImpl implements UserService {
 	private static Logger log = LogManager.getLogger(UserServiceImpl.class);
 	
@@ -30,33 +33,33 @@ public class UserServiceImpl implements UserService {
 	
 	private Random r;
 	
-	//@Autowired
+	@Autowired
 	public UserServiceImpl(UserDao ud, GachaDao gachaDao, OwnedGachaDao ownedGachaDao) {
 		super();
 		this.ud = ud;
-		this.gachaDao = gachaDao;
-		this.ownedGachaDao = ownedGachaDao;
+		//this.gachaDao = gachaDao;
+		//this.ownedGachaDao = ownedGachaDao;
 		this.r = new Random();
 	}
 
 	@Override
 	public User login(String name) {
-		User u = ud.getUser(name);
-		// TODO: Make this more reactive
-		List<UUID> inventoryIds = ud.getUserInventory(name);
+		UserDTO databaseUser = ud.findById(name).orElse(null);
 		
-		List<GachaObject> inventory = inventoryIds.stream()
-				.map(id -> ownedGachaDao.getGachaById(id))
+		List<GachaObject> inventory = databaseUser.getInventory().stream()
+				.map(id -> ownedGachaDao.findById(id).get().getCat())
 				.collect(Collectors.toList());
-		u.setInventory(inventory);
-		return u;
+		User user = databaseUser.getUser();
+		user.setInventory(inventory);
+		return user;
 	}
 	
 	@Override
 	public void doCheckIn(User user) {
-		user.setLastCheckIn(LocalDate.now());
-		user.setCurrency(user.getCurrency() + GachaObject.DAILY_BONUS);
-		ud.updateUser(user);
+		UserDTO databaseUser = new UserDTO(user);
+		databaseUser.setLastCheckIn(LocalDate.now());
+		databaseUser.setCurrency(user.getCurrency() + GachaObject.DAILY_BONUS);
+		ud.save(databaseUser);
 	}
 	
 	@Override
@@ -66,7 +69,7 @@ public class UserServiceImpl implements UserService {
 		u.setUsername(username);
 		u.setEmail(email);
 		u.setBirthday(birthday);
-		ud.addUser(u);
+		ud.save(new UserDTO(u));
 		return u;
 	}
 	
@@ -80,7 +83,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public boolean checkAvailability(String newName) {
-		User u = ud.getUser(newName);
+		UserDTO u = ud.findById(newName).orElse(null);
 		return u==null ? true : false;
 	}
 
@@ -96,7 +99,7 @@ public class UserServiceImpl implements UserService {
 	
 	// level up a gacha that a user owns
 	@Override
-	public void levelGacha(User user, GachaObject predator, GachaObject food) {
+	public void levelGacha(User user, HistoricalCat predator, HistoricalCat food) {
 		// make sure the predator isn't max level
 		if(GachaObject.MAXIMUM_LEVEL.equals(predator.getLevel())){
 			return;
@@ -107,18 +110,18 @@ public class UserServiceImpl implements UserService {
 		user.getInventory().remove(food);
 		
 		// delete a cat
-		ownedGachaDao.deleteGacha(food);
+		ownedGachaDao.delete(new OwnedHistoricalCatDTO(food));
 		// save a cat
-		ownedGachaDao.updateGacha(predator);
+		ownedGachaDao.save(new OwnedHistoricalCatDTO(predator));
 		// save a user
 		log.debug(user);
-		ud.updateUser(user);
+		ud.save(new UserDTO(user));
 	}
 	
 	// summon a gacha
 	@Override
 	public GachaObject summon(User summoner) {
-		GachaObject summonedObject = null;
+		HistoricalCat summonedObject = null;
 		
 		// 1. Verify user has enough currency
 		if(summoner.getCurrency() < GachaObject.SUMMON_COST) {
@@ -127,23 +130,24 @@ public class UserServiceImpl implements UserService {
 		// 2. Determine what rarity the user gets
 		Integer chance = r.nextInt(100);
 		// 3. Obtain the object
-		List<GachaObject> rarityObjects = gachaDao.getGachasByRarity(Rarity.getRarity(chance));
+		List<HistoricalCatDTO> rarityObjects = gachaDao.findByRarity(Rarity.getRarity(chance));
 		Collections.shuffle(rarityObjects);
-		summonedObject = rarityObjects.get(0);
-		summonedObject.setId(ownedGachaDao.addGacha(summonedObject));
+		summonedObject = rarityObjects.get(0).getHistoricalCat();
+		ownedGachaDao.save(new OwnedHistoricalCatDTO(summonedObject));
+		summonedObject.setId(summonedObject.getId());
 		
 		// 4. Update the user's currency
 		summoner.setCurrency(summoner.getCurrency() - GachaObject.SUMMON_COST);
 		
 		summoner.getInventory().add(summonedObject);
-		ud.updateUser(summoner);
+		ud.save(new UserDTO(summoner));
 		// 6. Saving
 		return summonedObject;
 	}
 
 	@Override
 	public void updateUser(User user) {
-		ud.updateUser(user);
+		ud.save(new UserDTO(user));
 	}
 
 }

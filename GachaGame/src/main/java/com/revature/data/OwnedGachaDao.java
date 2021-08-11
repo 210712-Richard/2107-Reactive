@@ -1,23 +1,11 @@
 package com.revature.data;
 
-import java.util.List;
 import java.util.UUID;
 
-import com.revature.beans.GachaObject;
-import com.revature.beans.Rarity;
+import org.springframework.data.cassandra.repository.CassandraRepository;
+import org.springframework.stereotype.Repository;
 
-public interface OwnedGachaDao {	
-	GachaObject getGachaById(UUID id);
-	
-	UUID addGacha(GachaObject gacha);
+import com.revature.dto.OwnedHistoricalCatDTO;
 
-	List<GachaObject> getGachas();
-	
-	GachaObject getGachaByName(String name);
-
-	List<GachaObject> getGachasByRarity(Rarity rarity);
-
-	void updateGacha(GachaObject gacha);
-	
-	void deleteGacha(GachaObject gacha);
-}
+@Repository
+public interface OwnedGachaDao extends CassandraRepository<OwnedHistoricalCatDTO, UUID>{}

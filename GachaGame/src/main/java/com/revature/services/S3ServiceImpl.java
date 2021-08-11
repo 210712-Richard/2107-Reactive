@@ -11,13 +11,13 @@ import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.GetObjectRequest;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
-//@Service
-public class S3ServiceImpl implements S3Service{
+@Service // A Spring Stereotype that tells the ApplicationContext to create one of these
+public class S3ServiceImpl implements S3Service {
 	private S3Client s3;
 	public String bucketName;
 	
 	
-	//@Autowired
+	@Autowired // An annotation that signals that the ApplicationContext must give it these parameters
 	public S3ServiceImpl(S3Client s3, @Value("${BUCKET_NAME}") String name) {
 		super();
 		this.s3 = s3;

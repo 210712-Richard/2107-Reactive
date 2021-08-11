@@ -3,6 +3,7 @@ package com.revature.services;
 import java.time.LocalDate;
 
 import com.revature.beans.GachaObject;
+import com.revature.beans.HistoricalCat;
 import com.revature.beans.User;
 
 public interface UserService {
@@ -20,7 +21,7 @@ public interface UserService {
 	boolean checkBirthday(LocalDate birth);
 
 	// level up a gacha that a user owns
-	void levelGacha(User user, GachaObject predator, GachaObject food);
+	void levelGacha(User user, HistoricalCat predator, HistoricalCat food);
 
 	// summon a gacha
 	GachaObject summon(User summoner);

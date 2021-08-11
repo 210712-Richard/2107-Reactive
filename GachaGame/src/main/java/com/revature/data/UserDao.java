@@ -1,20 +1,9 @@
 package com.revature.data;
 
-import java.util.List;
-import java.util.UUID;
+import org.springframework.data.cassandra.repository.CassandraRepository;
+import org.springframework.stereotype.Repository;
 
-import com.revature.beans.User;
+import com.revature.dto.UserDTO;
 
-public interface UserDao {
-
-	void addUser(User u);
-
-	List<User> getUsers();
-
-	User getUser(String username);
-
-	void updateUser(User user);
-	
-	List<UUID> getUserInventory(String username);
-
-}
+@Repository
+public interface UserDao extends CassandraRepository<UserDTO, String>{ }

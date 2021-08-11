@@ -27,6 +27,7 @@ import com.revature.beans.UserType;
 import com.revature.data.GachaDao;
 import com.revature.data.OwnedGachaDao;
 import com.revature.data.UserDao;
+import com.revature.dto.UserDTO;
 
 public class UserServiceTest {
 	private static UserServiceImpl service;
@@ -59,10 +60,10 @@ public class UserServiceTest {
 		service.register(username, email, date);
 		
 		// An object that allows us to receive parameters from methods called on a Mockito mock object
-		ArgumentCaptor<User> captor = ArgumentCaptor.forClass(User.class);
+		ArgumentCaptor<UserDTO> captor = ArgumentCaptor.forClass(UserDTO.class);
 
 		// ud.addUser() was called with our User as an argument.
-		Mockito.verify(ud).addUser(captor.capture());
+		Mockito.verify(ud).save(captor.capture());
 
 		// ud.writeToFile() was called.
 		//Mockito.verify(service.ud).writeToFile();
@@ -70,7 +71,7 @@ public class UserServiceTest {
 		// A user is created with the given arguments
 		// That user is of type Player
 		// That user has a starting Currency of 1000
-		User u = captor.getValue();
+		UserDTO u = captor.getValue();
 		assertEquals(1000l, u.getCurrency(), "Asserting starting currency is 1000");
 		assertEquals(UserType.PLAYER, u.getType(), "Asserting it is a Player");
 		assertEquals(username, u.getUsername(), "Asserting username is correct");
@@ -118,33 +119,4 @@ public class UserServiceTest {
 		assertTrue(service.hasCheckedIn(u));
 	}
 	
-	@Test
-	public void testLogIn() {
-		// input: Name
-		// outputs: User with that name or null if none found.
-		//when(listMock.add(anyString())).thenReturn(false);
-		String username = "Richard";
-		User u = new User();
-		u.setUsername(username);
-		Mockito.when(ud.getUser(username)).thenReturn(u);
-		List<UUID> list = new ArrayList<UUID>();
-		UUID id = UUID.randomUUID();
-		list.add(id);
-		when(ud.getUserInventory(username)).thenReturn(list);
-		HistoricalCat hist = new HistoricalCat();
-		when(ogd.getGachaById(id)).thenReturn(hist);
-		User recievedUser = service.login(username);
-		
-		// 1. Did we receive our user?
-		assertEquals(u, recievedUser, "We receive the correct user");
-		// 2. Calls ud.getUser();
-		Mockito.verify(ud).getUser(username);
-		// 3. Calls ud.getUserInventory();
-		Mockito.verify(ud).getUserInventory(username);
-		// 4. Calls ownedGachaDao.getGachaById(id) for each
-		//		id in the list returned by getUserInventory
-		Mockito.verify(ogd, times(1)).getGachaById(id);
-		// 5. Is our cat inside the user?
-		assertEquals(hist, recievedUser.getInventory().get(0));
-	}
 }
