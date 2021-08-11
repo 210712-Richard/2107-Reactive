@@ -100,8 +100,31 @@ public class UserController {
 
 	// ROOM 1
 	// As a player, I can obtain currency.
-	// app.put("/users/:username/lastCheckIn", userController::dailyCheckIn);
-
+	//app.put("/users/:username/lastCheckIn", userController::dailyCheckIn);
+	@PutMapping("{username}/lastCheckIn")
+	public ResponseEntity<Long> dailyCheckIn(@PathVariable("username") String name, WebSession session) {
+		User loggedUser = (User) session.getAttribute("loggedUser");
+		if(loggedUser == null) {
+			return ResponseEntity.status(401).build();
+		}
+		if(!loggedUser.getUsername().equals(name)) {
+			return ResponseEntity.status(403).build();
+		}
+		
+		// actual implementation
+		
+		// check if already checked in today
+		Boolean checkedIn = userService.hasCheckedIn(loggedUser);
+		if (checkedIn == true) {
+			return ResponseEntity.status(403).build();
+		}
+		
+		// do check in
+		userService.doCheckIn(loggedUser);
+		return ResponseEntity.ok(loggedUser.getCurrency());
+		
+	}
+	
 	// ROOM 2
 	// As a player, I can view my currency.
 	// app.get("/users/:username/currency", userController::getCurrency);
