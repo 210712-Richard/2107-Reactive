@@ -1,6 +1,7 @@
 package com.revature.controllers;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.WebSession;
 
 import com.revature.beans.GachaObject;
+import com.revature.beans.HistoricalCat;
 import com.revature.beans.User;
 import com.revature.services.UserService;
 
@@ -153,7 +155,33 @@ public class UserController {
 
 	// ROOM 3
 	// As a player, I can level up my gacha
-	// app.put("/users/:username/inventory/:gachaId", userController::level);
+	@PutMapping("{username}/inventory/{gachaId}")
+	public ResponseEntity<GachaObject> level(
+			@PathVariable("username") String name,
+			WebSession session,
+			@PathVariable("gachaId") String gachaId,
+			@RequestBody HistoricalCat food){
+		User loggedUser = (User) session.getAttribute("loggedUser");
+		if (loggedUser == null) {
+			return ResponseEntity.status(401).build();
+		}
+		if (!loggedUser.getUsername().equals(name)) {
+			return ResponseEntity.status(403).build();
+		}
+		User user = userService.login(name);
+		
+		HistoricalCat cat = (HistoricalCat) user.getInventory().stream()
+				.filter((gacha) -> gacha.getId().equals(UUID.fromString(gachaId)))
+				.findFirst()
+				.orElse(null);
+		
+		if (cat == null) {
+			return ResponseEntity.status(404).build();
+		}
+		
+		userService.levelGacha(user, cat, food);
+		return ResponseEntity.ok(cat);
+	}
 
 	// ROOM 4
 	// As a player, I can send my gacha on a mission
