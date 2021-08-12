@@ -76,7 +76,7 @@ public class UserController {
 
 	// As a player, I can view my gachas
 	@GetMapping("{username}/inventory")
-	public ResponseEntity<List<GachaObject>> getInventory(@PathVariable("username") String name, WebSession session) {
+	public ResponseEntity<List<HistoricalCat>> getInventory(@PathVariable("username") String name, WebSession session) {
 		User loggedUser = (User) session.getAttribute("loggedUser");
 		if (loggedUser == null) {
 			return ResponseEntity.status(401).build();

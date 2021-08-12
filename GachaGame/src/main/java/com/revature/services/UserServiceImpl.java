@@ -47,7 +47,7 @@ public class UserServiceImpl implements UserService {
 	public User login(String name) {
 		UserDTO databaseUser = ud.findById(name).orElse(null);
 		
-		List<GachaObject> inventory = databaseUser.getInventory().stream()
+		List<HistoricalCat> inventory = databaseUser.getInventory().stream()
 				.map(id -> ownedGachaDao.findByUuid(id).get().getCat())
 				.collect(Collectors.toList());
 		User user = databaseUser.getUser();

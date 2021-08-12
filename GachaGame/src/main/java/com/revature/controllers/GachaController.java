@@ -1,11 +1,12 @@
 package com.revature.controllers;
 
 import java.io.InputStream;
-import java.util.List;
+import java.time.Duration;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,12 +19,16 @@ import org.springframework.web.server.ServerWebExchange;
 import org.springframework.web.server.WebSession;
 
 import com.revature.beans.GachaObject;
+import com.revature.beans.HistoricalCat;
 import com.revature.beans.Rarity;
 import com.revature.beans.User;
 import com.revature.beans.UserType;
-import com.revature.services.GachaService;
+import com.revature.services.ReactiveGachaService;
 import com.revature.services.S3Service;
 import com.revature.services.UserService;
+
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 @RestController
 @RequestMapping("/gachas")
@@ -31,7 +36,7 @@ public class GachaController {
 	private static final Logger log = LogManager.getLogger(GachaController.class);
 	
 	@Autowired
-	private GachaService gachaService;
+	private ReactiveGachaService gachaService;
 	
 	@Autowired
 	private UserService userService;
@@ -41,17 +46,19 @@ public class GachaController {
 
 	// As an admin, I can add an Gacha object
 	@PostMapping
-	public ResponseEntity<GachaObject> createGacha(@RequestBody GachaObject gacha, WebSession session) {
+	public Mono<ResponseEntity<Object>> createGacha(@RequestBody HistoricalCat gacha, WebSession session) {
 		// check for admin powers
 		User loggedUser = (User) session.getAttribute("loggedUser");
 		if (loggedUser == null || !UserType.GAME_MASTER.equals(loggedUser.getType())) {
-			return ResponseEntity.status(403).build();
+			return Mono.just(ResponseEntity.status(403).build());
 		}
-		GachaObject created = gachaService.createGacha(gacha);
-		if (created == null) {
-			return ResponseEntity.status(400).build();
-		}
-		return ResponseEntity.ok(created);
+		return Mono.just(gachaService.createGacha(gacha)).map((g)-> {
+			if(g == null) {
+				return ResponseEntity.status(409).build();
+			} else {
+				return ResponseEntity.ok(g);
+			}
+		});
 	}
 
 	// As an admin, I can update a Gacha in the pool
@@ -65,12 +72,12 @@ public class GachaController {
 		}
 
 		// check to see if gacha exists
-		GachaObject retrieved = gachaService.getGacha(Rarity.valueOf(rarity), name);
+		Mono<HistoricalCat> retrieved = gachaService.getGacha(Rarity.valueOf(rarity), name);
 		if (retrieved == null) {
 			return ResponseEntity.notFound().build();
 		}
 
-		gachaService.updateGacha(gacha);
+		//gachaService.updateGacha(gacha);
 		return ResponseEntity.ok(gacha);
 	}
 
@@ -88,7 +95,7 @@ public class GachaController {
 		}
 
 		// check to see if gacha exists
-		GachaObject retrieved = gachaService.getGacha(Rarity.valueOf(rarity), name);
+		GachaObject retrieved = (GachaObject) gachaService.getGacha(Rarity.valueOf(rarity), name);
 		if (retrieved == null) {
 			return ResponseEntity.notFound().build();
 		}
@@ -104,7 +111,7 @@ public class GachaController {
 		});
 
 		retrieved.setPictureUrl(key);
-		gachaService.updateGacha(retrieved);
+		//gachaService.updateGacha(retrieved);
 		return ResponseEntity.noContent().build();
 	}
 
@@ -113,7 +120,7 @@ public class GachaController {
 	public ResponseEntity<InputStream> downloadPicture(@PathVariable("rarity") String rarity,
 			@PathVariable("name") String name) {
 		// check to see if gacha exists
-		GachaObject retrieved = gachaService.getGacha(Rarity.valueOf(rarity), name);
+		GachaObject retrieved = (GachaObject) gachaService.getGacha(Rarity.valueOf(rarity), name);
 		if (retrieved == null) {
 			return ResponseEntity.notFound().build();
 		}
@@ -121,9 +128,9 @@ public class GachaController {
 		return ResponseEntity.ok(s3Service.getObject(retrieved.getPictureUrl()));
 	}
 	
-	@GetMapping
-	public ResponseEntity<List<GachaObject>> getGachase(){
-		return ResponseEntity.ok(gachaService.getGachas());
+	@GetMapping(produces=MediaType.APPLICATION_NDJSON_VALUE)
+	public ResponseEntity<Flux<HistoricalCat>> getGachase(){
+		return ResponseEntity.ok(gachaService.getGachas().delayElements(Duration.ofSeconds(1)));
 	}
 
 }

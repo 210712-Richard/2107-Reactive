@@ -14,13 +14,13 @@ import org.springframework.data.cassandra.core.convert.CassandraConverter;
 import org.springframework.data.cassandra.core.convert.MappingCassandraConverter;
 import org.springframework.data.cassandra.core.mapping.CassandraMappingContext;
 import org.springframework.data.cassandra.core.mapping.SimpleUserTypeResolver;
-import org.springframework.data.cassandra.repository.config.EnableCassandraRepositories;
+import org.springframework.data.cassandra.repository.config.EnableReactiveCassandraRepositories;
 
 import com.datastax.oss.driver.api.core.CqlSession;
 import com.datastax.oss.driver.api.core.config.DriverConfigLoader;
 
 @Configuration
-@EnableCassandraRepositories(basePackages = {"com.revature.data"})
+@EnableReactiveCassandraRepositories(basePackages = {"com.revature.data"})
 public class CassandraUtil {
 	private static final Logger log = LogManager.getLogger(CassandraUtil.class);
 	

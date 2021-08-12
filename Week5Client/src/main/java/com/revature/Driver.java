@@ -18,17 +18,22 @@ public class Driver {
 	private static void retrieveMyBeans() {
 		WebClient client= WebClient.create("http://localhost:8080");
 		
-		client.get().uri("/bean").accept(MediaType.APPLICATION_NDJSON).retrieve().bodyToFlux(Bean.class).subscribe(bean->{
+		client.get().uri("/hi").accept(MediaType.APPLICATION_NDJSON).retrieve().bodyToFlux(Bean.class).subscribe(bean->{
 			System.out.println(bean);
 		});
 		
 		while(true) {
+			int i = 0;
 			System.out.println("hello");
 			try {
 				Thread.sleep(1000);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+			}
+			i++;
+			if(i>10) {
+				break;
 			}
 		}
 	}
