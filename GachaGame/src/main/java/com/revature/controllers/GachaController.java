@@ -23,9 +23,9 @@ import com.revature.beans.HistoricalCat;
 import com.revature.beans.Rarity;
 import com.revature.beans.User;
 import com.revature.beans.UserType;
-import com.revature.services.ReactiveGachaService;
 import com.revature.services.S3Service;
 import com.revature.services.UserService;
+import com.revature.services.reactive.ReactiveGachaService;
 
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -83,7 +83,7 @@ public class GachaController {
 
 	// As an admin, I can upload a picture for a Gacha
 	@PutMapping("{rarity}/{name}/pictureUrl")
-	public ResponseEntity<Void> uploadPicture(@PathVariable("rarity") String rarity, @PathVariable("name") String name,
+	public Mono<ResponseEntity<Object>> uploadPicture(@PathVariable("rarity") String rarity, @PathVariable("name") String name,
 			WebSession session, ServerWebExchange exchange) {
 
 		// check for admin powers
@@ -91,41 +91,44 @@ public class GachaController {
 		loggedUser = userService.login(loggedUser.getUsername());
 		log.debug(loggedUser);	
 		if (loggedUser == null || !UserType.GAME_MASTER.equals(loggedUser.getType())) {
-			return ResponseEntity.status(403).build();
+			return Mono.just(ResponseEntity.status(403).build());
 		}
-
-		// check to see if gacha exists
-		GachaObject retrieved = (GachaObject) gachaService.getGacha(Rarity.valueOf(rarity), name);
-		if (retrieved == null) {
-			return ResponseEntity.notFound().build();
-		}
-
 		String fileExtension = exchange.getRequest().getHeaders().getFirst("extension");
 		if (fileExtension == null) {
-			return ResponseEntity.badRequest().build();
+			return Mono.just(ResponseEntity.badRequest().build());
 		}
-
+		
+		// REACTIVE
 		String key = name +"."+ fileExtension;
-		exchange.getRequest().getBody().subscribe((data)->{
-			s3Service.uploadToBucket(key, data.asByteBuffer().array());
-		});
-
-		retrieved.setPictureUrl(key);
-		//gachaService.updateGacha(retrieved);
-		return ResponseEntity.noContent().build();
+		
+		// check to see if gacha exists
+		return gachaService.getGacha(Rarity.valueOf(rarity), name)
+				.single()
+				.map((cat) -> {
+					exchange.getRequest().getBody().subscribe((data)->{
+						s3Service.uploadToBucket(key, data.asByteBuffer().array());
+					});
+					
+					cat.setPictureUrl(key);
+					
+					return gachaService.updateGacha(cat); //this will not fire unless we subscribe to it
+				}).map(cat -> {
+					return ResponseEntity.noContent().build();
+				})
+				.onErrorResume(e -> Mono.just(ResponseEntity.notFound().build()));
 	}
 
 	// As a user, I can download a picture for a Gacha
 	@GetMapping("{rarity}/{name}/pictureUrl")
-	public ResponseEntity<InputStream> downloadPicture(@PathVariable("rarity") String rarity,
+	public Mono<ResponseEntity<InputStream>> downloadPicture(@PathVariable("rarity") String rarity,
 			@PathVariable("name") String name) {
 		// check to see if gacha exists
-		GachaObject retrieved = (GachaObject) gachaService.getGacha(Rarity.valueOf(rarity), name);
-		if (retrieved == null) {
-			return ResponseEntity.notFound().build();
-		}
-		
-		return ResponseEntity.ok(s3Service.getObject(retrieved.getPictureUrl()));
+		return gachaService.getGacha(Rarity.valueOf(rarity), name)
+				.single()
+				.map(retrieved -> {
+					return ResponseEntity.ok(s3Service.getObject(retrieved.getPictureUrl()));
+				})
+				.onErrorResume(e -> Mono.just(ResponseEntity.notFound().build()));
 	}
 	
 	@GetMapping(produces=MediaType.APPLICATION_NDJSON_VALUE)

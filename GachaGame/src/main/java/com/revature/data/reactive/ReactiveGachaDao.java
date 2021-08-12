@@ -1,4 +1,4 @@
-package com.revature.data;
+package com.revature.data.reactive;
 
 import org.springframework.data.cassandra.repository.ReactiveCassandraRepository;
 import org.springframework.stereotype.Repository;

@@ -1,11 +1,11 @@
-package com.revature.services;
+package com.revature.services.reactive;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.revature.beans.HistoricalCat;
 import com.revature.beans.Rarity;
-import com.revature.data.ReactiveGachaDao;
+import com.revature.data.reactive.ReactiveGachaDao;
 import com.revature.dto.HistoricalCatDTO;
 
 import reactor.core.publisher.Flux;
