@@ -6,12 +6,12 @@
 	<artifactId>GachaGame</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
-	
+
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>2.5.0</version>
-		<relativePath/> <!-- lookup parent from repository -->
+		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 
 	<!-- Storing configuration as code. Rather than leaving a readme that tells 
@@ -49,27 +49,27 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-log4j2</artifactId>
 		</dependency>
-		
+
 		<!-- Datastax Cassandra Driver -->
 		<dependency>
 			<groupId>com.datastax.oss</groupId>
 			<artifactId>java-driver-core</artifactId>
 		</dependency>
-		
-        <!-- AWS plugin for Cassandra authentication -->
+
+		<!-- AWS plugin for Cassandra authentication -->
 		<dependency>
 			<groupId>software.aws.mcs</groupId>
 			<artifactId>aws-sigv4-auth-cassandra-java-driver-plugin</artifactId>
 			<version>4.0.4</version>
 		</dependency>
-		
+
 		<!-- AWS S3 SDK -->
 		<dependency>
 			<groupId>software.amazon.awssdk</groupId>
 			<artifactId>s3</artifactId>
 		</dependency>
 
-        <dependency>
+		<dependency>
 			<groupId>org.apache.httpcomponents</groupId>
 			<artifactId>httpcore</artifactId>
 		</dependency>
@@ -78,12 +78,12 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-webflux</artifactId>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-aop</artifactId>
 		</dependency>
-		
+
 		<!-- Dev Tools: DevTools are for ease of deployment. One of the primary 
 			tools Spring DevTools gives us is auto-server restart when it detects changes 
 			to the codebase. DevTools is autodisabled when packaged for production. -->
@@ -111,6 +111,13 @@
 		<dependency>
 			<groupId>io.projectreactor</groupId>
 			<artifactId>reactor-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>com.intuit.karate</groupId>
+			<artifactId>karate-junit5</artifactId>
+			<version>1.1.0</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
