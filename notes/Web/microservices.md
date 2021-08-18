@@ -116,4 +116,30 @@ This is good for decoupling specific configurations for dev/test/prod environmen
 # Recommended Reading
 [Fowler: Decomposing Services](https://martinfowler.com/articles/break-monolith-into-microservices.html)
 
-# CHAOS ENGINEERING
+# Chaos Engineering
+
+Messing with Production to prove everything works.
+
+## Chaos Monkey
+
+A service that you deploy to your Microservice Architecture and it is responisble for randly terminating other services. This proves that your other services can handle the sudden failure of a service. That your ecosystem/architecture is robust.
+
+## Janitor Monkey / Swabbie
+
+Removes resources that are no longer being used.
+
+## Conformity Monkey / Consumed by Spinnaker
+
+Ensure all resources conform to policy and shuts any that don't down.
+
+## Chaos Gorilla
+
+Simulates an outage in an entire availability zone.
+
+## Chaos Kong
+
+Simulates an outage in an entire region.
+
+## Armageddon Ape (isn't actually a service)
+
+A Google Cloud backup in the event that AWS dies. They estimate it would take them only days to be back online.
