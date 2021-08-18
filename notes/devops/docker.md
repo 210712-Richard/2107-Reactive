@@ -55,3 +55,41 @@ Each Docker image consists of layers that mutate a *base* image that is generall
 ### Some CLI stuff
 * `docker build -t {name} .`: Builds from the current directory
 * `docker run {name}:latest`: Runs the latest build of the image given 
+
+## Orchestration
+
+Container Orchestration is the process by which we manage the deployment, replication, and maintenance of multiple containers.
+
+Examples:
+* Docker Swarm
+* Kubernetes
+* AWS ECS (Elastic Container Service)
+* AWS Fargate (Serverless version of ECS)
+* AWS EKS (Elastic Kubernetes Service)
+
+### Fun thing
+
+Docker created the Docker Container and the Docker Swarm for orchestrating containers.
+
+Google created ContainerD Container and Kubernetes for orchestrating containers.
+
+Most people use Docker as the container and Kubernetes for orchestration.
+
+### Kubernetes Definitions
+* **Cluster** - A collection of nodes with at least one master (Control Plane) and Worker (Kubelet) process.
+* **Pod (In ECS, they call this a Task)** - Smallest unit of execution in K8s. An abstraction of an application managed by K8s.
+  * If the application consists of 3 services and all should be replicated evenly, you could declare those three containers as a pod and K8s will replicate that pod across the nodes.
+  * You can have a pod that consists of only a single container, or multiple containers.
+* **Deployment** - A declaritive solution for managing Pods and ReplicaSets
+  * A file that declares what your pods are and how pods should be replicated.
+* **Service** - Defines a logical set of pods and a policy for accessing them.
+  * The gateway service into your cluster.
+* **Control Plane** - The master node. Contains our kube-controller manager which is responsible for ensureing that all nodes are healthy, all nodes are replicated correctly, and knows how to map our endpoints to our pods. (It knows the mappings due to the Service definitions.)
+* **Node** - A machine running either the Control Plane or a Kubelet.
+* **Kubelet** - A worker node. Ensures that the containers on the pods it contains are running.
+
+### ECS vs Fargate
+
+In ECS (and EKS) you define tasks and let your services deploy those tasks to a cluster you have created using EC2s. For example you could have a cluster of 5 `t2.medium`s to hancle your pods, and then if your deployments gets too large, you'll have to deploy more resources. But if your deployment isn't utilizing very much of your resources you're wasting money.
+
+In Fargate, it dynamically provisions compute power based on the tasks that are running. You don't provision the cluster, it does.
