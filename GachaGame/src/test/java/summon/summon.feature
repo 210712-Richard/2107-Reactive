@@ -1,7 +1,7 @@
 Feature: login as a user and summon a new cat
 Scenario: As a logged in user, send a post request to the summon url and receive a new cat
 
-Given url 'http://localhost:8080/users/Michael/inventory'
+Given url michaelInventory
 And def signin = call read('classpath:login/login.feature')
 And request {}
 And cookie SESSION = signin.sessionCookie

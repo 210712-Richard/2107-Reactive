@@ -133,7 +133,7 @@ public class GachaController {
 	
 	@GetMapping(produces=MediaType.APPLICATION_NDJSON_VALUE)
 	public ResponseEntity<Flux<HistoricalCat>> getGachase(){
-		return ResponseEntity.ok(gachaService.getGachas().delayElements(Duration.ofSeconds(1)));
+		return ResponseEntity.ok(gachaService.getGachas()/*.delayElements(Duration.ofSeconds(1))*/);
 	}
 
 }
