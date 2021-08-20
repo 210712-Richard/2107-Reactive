@@ -1,7 +1,6 @@
 package com.revature.controllers;
 
 import java.io.InputStream;
-import java.time.Duration;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -32,12 +31,12 @@ import reactor.core.publisher.Mono;
 
 @RestController
 @RequestMapping("/gachas")
-public class GachaController {	
+public class GachaController {
 	private static final Logger log = LogManager.getLogger(GachaController.class);
-	
+
 	@Autowired
 	private ReactiveGachaService gachaService;
-	
+
 	@Autowired
 	private UserService userService;
 
@@ -52,8 +51,8 @@ public class GachaController {
 		if (loggedUser == null || !UserType.GAME_MASTER.equals(loggedUser.getType())) {
 			return Mono.just(ResponseEntity.status(403).build());
 		}
-		return Mono.just(gachaService.createGacha(gacha)).map((g)-> {
-			if(g == null) {
+		return Mono.just(gachaService.createGacha(gacha)).map((g) -> {
+			if (g == null) {
 				return ResponseEntity.status(409).build();
 			} else {
 				return ResponseEntity.ok(g);
@@ -63,10 +62,11 @@ public class GachaController {
 
 	// As an admin, I can update a Gacha in the pool
 	@PutMapping("/{rarity}/{name}")
-	public ResponseEntity<GachaObject> updateGacha(@RequestBody GachaObject gacha,
+	public ResponseEntity<Mono<HistoricalCat>> updateGacha(@RequestBody HistoricalCat gacha,
 			@PathVariable("rarity") String rarity, @PathVariable("name") String name, WebSession session) {
 		// check for admin powers
 		User loggedUser = (User) session.getAttribute("loggedUser");
+		loggedUser = userService.login(loggedUser.getUsername());
 		if (loggedUser == null || !UserType.GAME_MASTER.equals(loggedUser.getType())) {
 			return ResponseEntity.status(403).build();
 		}
@@ -77,19 +77,26 @@ public class GachaController {
 			return ResponseEntity.notFound().build();
 		}
 
-		//gachaService.updateGacha(gacha);
-		return ResponseEntity.ok(gacha);
+		return ResponseEntity.ok(gachaService.updateGacha(gacha));
+	}
+
+	// As an admin, I can update a Gacha in the pool
+	@GetMapping("/{rarity}/{name}")
+	public ResponseEntity<Mono<HistoricalCat>> getGacha(@RequestBody HistoricalCat gacha,
+			@PathVariable("rarity") String rarity, @PathVariable("name") String name, WebSession session) {
+
+		return ResponseEntity.ok(gachaService.getGacha(Rarity.valueOf(rarity), name));
 	}
 
 	// As an admin, I can upload a picture for a Gacha
 	@PutMapping("{rarity}/{name}/pictureUrl")
-	public Mono<ResponseEntity<Object>> uploadPicture(@PathVariable("rarity") String rarity, @PathVariable("name") String name,
-			WebSession session, ServerWebExchange exchange) {
+	public Mono<ResponseEntity<Object>> uploadPicture(@PathVariable("rarity") String rarity,
+			@PathVariable("name") String name, WebSession session, ServerWebExchange exchange) {
 
 		// check for admin powers
 		User loggedUser = (User) session.getAttribute("loggedUser");
 		loggedUser = userService.login(loggedUser.getUsername());
-		log.debug(loggedUser);	
+		log.debug(loggedUser);
 		if (loggedUser == null || !UserType.GAME_MASTER.equals(loggedUser.getType())) {
 			return Mono.just(ResponseEntity.status(403).build());
 		}
@@ -97,25 +104,22 @@ public class GachaController {
 		if (fileExtension == null) {
 			return Mono.just(ResponseEntity.badRequest().build());
 		}
-		
+
 		// REACTIVE
-		String key = name +"."+ fileExtension;
-		
+		String key = name + "." + fileExtension;
+
 		// check to see if gacha exists
-		return gachaService.getGacha(Rarity.valueOf(rarity), name)
-				.single()
-				.map((cat) -> {
-					exchange.getRequest().getBody().subscribe((data)->{
-						s3Service.uploadToBucket(key, data.asByteBuffer().array());
-					});
-					
-					cat.setPictureUrl(key);
-					
-					return gachaService.updateGacha(cat); //this will not fire unless we subscribe to it
-				}).map(cat -> {
-					return ResponseEntity.noContent().build();
-				})
-				.onErrorResume(e -> Mono.just(ResponseEntity.notFound().build()));
+		return gachaService.getGacha(Rarity.valueOf(rarity), name).single().map((cat) -> {
+			exchange.getRequest().getBody().subscribe((data) -> {
+				s3Service.uploadToBucket(key, data.asByteBuffer().array());
+			});
+
+			cat.setPictureUrl(key);
+
+			return gachaService.updateGacha(cat); // this will not fire unless we subscribe to it
+		}).map(cat -> {
+			return ResponseEntity.noContent().build();
+		}).onErrorResume(e -> Mono.just(ResponseEntity.notFound().build()));
 	}
 
 	// As a user, I can download a picture for a Gacha
@@ -123,17 +127,14 @@ public class GachaController {
 	public Mono<ResponseEntity<InputStream>> downloadPicture(@PathVariable("rarity") String rarity,
 			@PathVariable("name") String name) {
 		// check to see if gacha exists
-		return gachaService.getGacha(Rarity.valueOf(rarity), name)
-				.single()
-				.map(retrieved -> {
-					return ResponseEntity.ok(s3Service.getObject(retrieved.getPictureUrl()));
-				})
-				.onErrorResume(e -> Mono.just(ResponseEntity.notFound().build()));
+		return gachaService.getGacha(Rarity.valueOf(rarity), name).single().map(retrieved -> {
+			return ResponseEntity.ok(s3Service.getObject(retrieved.getPictureUrl()));
+		}).onErrorResume(e -> Mono.just(ResponseEntity.notFound().build()));
 	}
-	
-	@GetMapping(produces=MediaType.APPLICATION_NDJSON_VALUE)
-	public ResponseEntity<Flux<HistoricalCat>> getGachase(){
-		return ResponseEntity.ok(gachaService.getGachas()/*.delayElements(Duration.ofSeconds(1))*/);
+
+	@GetMapping(produces = MediaType.APPLICATION_NDJSON_VALUE)
+	public ResponseEntity<Flux<HistoricalCat>> getGachase() {
+		return ResponseEntity.ok(gachaService.getGachas()/* .delayElements(Duration.ofSeconds(1)) */);
 	}
 
 }
