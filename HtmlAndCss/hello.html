@@ -1,0 +1,132 @@
+<!--
+    html - hyper-text markup language
+
+    hyper-text - text that references other documents that we can use to get those other documents
+    markup language - special part of a document that dictates structure, placement, and/or relationships of the data.
+-->
+<!DOCTYPE html> <!-- Hi, not only am I an html file, but I follow certain html standards -->
+<!-- the root tag. The root of the tree structure that represents the starting node.
+Everything in your html document should be in the html tag.
+(with the exception of the DOCTYPE tag which is special)-->
+<html lang="en">
+
+<head>
+    <!-- Contains meta-data such as css stylesheets, encoding information, title of the document-->
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/mysite.css">
+    <title>Hello World</title>
+</head>
+
+<body>
+    <!-- This is a comment in HTML -->
+    <h1 class="dispute">Hi</h1>
+    <h2>hi</h2>
+    <h3>hi</h3>
+    <h4>hi</h4>
+    <h5>hi</h5>
+    <h6>hi</h6>
+
+    <!-- HTML just sort of ignores whitespace. It compresses as much as seems reasonable-->
+
+
+    <br>
+    <br>
+    I can type directly
+
+
+    into the body <p> We can use the paragraph tag t
+        o group text together and separate it from ot
+        her text <span style="color:blue" class="goodbye">A span tag is
+            treated as a member of the parent tag but can be
+            selected and styled separately.</span>
+        which is nice.</p>
+    Nice.
+
+    <a href="https://eev.ee/blog/2020/02/01/old-css-new-css/">Click me</a>
+
+    <!-- HTML: elements vs text nodes. An html element is defined by a tag.
+        Generally speaking elements can contain other elements and text nodes.
+        A text-node is a group of text that is not contained within a tag.-->
+    <div class="hello">Div is to other elements what a span is to a text node.
+        Any tag within a div inherits the style of that div or it's parents.
+        It's an easy way to logically separate html tags.</div>
+
+    <div style="background-color: beige;">What is a div?
+        <p>We use divs as containers for other elements that should be styled the same way
+        </p>
+        <p>Both of these paragraphs are separate from one another but styled the same as the div.</p>
+    </div>
+    <!-- Semantic elements
+        Elements that describe what they are meant to do:
+            Div and span are not descriptive, but section and article are.
+    -->
+    <table>
+        <thead> <!-- Header columns -->
+            <tr>
+                <th class="hello goodbye">First Name</th>
+                <th>Last Name</th>
+                <th>Favorite Cheese</th>
+            </tr>
+        </thead>
+        <tbody> <!-- Everything else-->
+            <tr>
+                <th>Richard</th>
+                <td id="orr">Orr</td>
+                <td>Bleu</td>
+            </tr>
+            <tr>
+                <th>Alby</th>
+                <td>Pawlisch</td>
+                <td>Cheddar</td>
+            </tr>
+            <tr>
+                <th>Kyle</th>
+                <td>Bricker</td>
+                <td>Pepperjack</td>
+            </tr>
+            <tr>
+                <th>Sidd</th>
+                <td>Mohanty</td>
+                <td>Provolone</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h6>Unordered Lists</h6>
+    <ul>
+        <li>Michael</li>
+        <li>Stephen</li>
+        <li>Brian</li>
+    </ul>
+    <h6>Ordered Lists</h6>
+    <ol>
+        <li>Josh</li>
+        <li>Jasmine</li>
+        <li>Ellis</li>
+    </ol>
+    <ol type="A">
+        <li>Josh</li>
+        <li>Jasmine</li>
+        <li>Ellis</li>
+    </ol>
+    <ol type="a">
+        <li>Josh</li>
+        <li>Jasmine</li>
+        <li>Ellis</li>
+    </ol>
+    <ol type="I">
+        <li>Josh</li>
+        <li>Jasmine</li>
+        <li>Ellis</li>
+    </ol>
+    <ol type="i">
+        <li>Josh</li>
+        <li>Jasmine</li>
+        <li>Ellis</li>
+    </ol>
+    <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/WebsiteHosting.html">set up website hosting</a>
+</body>
+
+</html>

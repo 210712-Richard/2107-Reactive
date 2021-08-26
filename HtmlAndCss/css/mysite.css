@@ -1,0 +1,55 @@
+/*
+    My CSS file
+    Cascading Style Sheets allow us to apply styling to a web page
+
+    We can style:
+        Every tag with a specific type
+        every tag with a specific id
+        Every tag with a sepcific class
+        every child of any of the above
+        any combination of any of the above
+        and many more
+*/
+
+/* The more specific a style is, the more important CSS will think it is.
+If we have a dispute between styling something that is "the child of any element with a class" and
+"any element with a class", The former is going to be "more specific" and so will overrule the latter.
+
+Otherwise, CSS 'cascades' and the most recent style is the one that wins. */
+
+.dispute { /* class selector is more specific than element selector */
+    background-color: orange;
+}
+
+h1 {
+    background-color: green;
+    color: red;
+}
+
+/* classes: reusable names that allow you to group elements that should be styled the same way in an html document.
+utilize the . operator */
+
+.hello {
+    color: orange;
+}
+.goodbye{
+    color: green;
+}
+
+/* ids: unique names that select a specific operator (though css will get all elements with one id)
+
+They use # operator */
+
+#orr {
+    color: magenta;
+    background-color: navy;
+}
+
+tr > .hello {
+    color: cyan;
+    background-color: teal;
+}
+
+body {
+    background-image: url("../images/aws.png");
+}
