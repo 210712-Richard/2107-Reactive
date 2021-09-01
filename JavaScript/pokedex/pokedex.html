@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pokemon, digivolve into Champion</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+</head>
+
+<body>
+    <h1>Using the RESTful Pokemon API</h1>
+
+    <div class="container">
+        <label for="pokemonId">Search for Pokemon: </label>
+        <input type="text" id="pokemonId" placeholder="Enter Pokemon Id">
+        <input type="submit" value="Get Pokemon Info" id="pokemonSubmit">
+    </div>
+    <br>
+    <div class="container">
+        <h1 id="pokemonName"></h1>
+        <img src="" alt="This will be a pokemon" id="pokemonImg" class="image-fluid">
+        <div id="types"></div>
+        <div id="stats"></div>
+        <div id="games"></div>
+    </div>
+    <script src="js/pokedex.js"></script>
+</body>
+
+</html>

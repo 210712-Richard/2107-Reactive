@@ -18,7 +18,7 @@ import com.revature.beans.Rarity;
 @Table("owned_gacha")
 public class OwnedHistoricalCatDTO {
 	private static final TupleType STATS_TUPLE = DataTypes.tupleOf(DataTypes.INT, DataTypes.INT, DataTypes.INT);
-	
+
 	@PrimaryKeyColumn(
 			name="id",
 			ordinal=0,

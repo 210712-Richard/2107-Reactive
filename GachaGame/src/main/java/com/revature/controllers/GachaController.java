@@ -7,6 +7,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,7 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ServerWebExchange;
 import org.springframework.web.server.WebSession;
 
-import com.revature.beans.GachaObject;
 import com.revature.beans.HistoricalCat;
 import com.revature.beans.Rarity;
 import com.revature.beans.User;
@@ -31,6 +31,7 @@ import reactor.core.publisher.Mono;
 
 @RestController
 @RequestMapping("/gachas")
+@CrossOrigin
 public class GachaController {
 	private static final Logger log = LogManager.getLogger(GachaController.class);
 
@@ -45,13 +46,13 @@ public class GachaController {
 
 	// As an admin, I can add an Gacha object
 	@PostMapping
-	public Mono<ResponseEntity<Object>> createGacha(@RequestBody HistoricalCat gacha, WebSession session) {
+	public Mono<ResponseEntity<HistoricalCat>> createGacha(@RequestBody HistoricalCat gacha, WebSession session) {
 		// check for admin powers
 		User loggedUser = (User) session.getAttribute("loggedUser");
 		if (loggedUser == null || !UserType.GAME_MASTER.equals(loggedUser.getType())) {
 			return Mono.just(ResponseEntity.status(403).build());
 		}
-		return Mono.just(gachaService.createGacha(gacha)).map((g) -> {
+		return gachaService.createGacha(gacha).map((g) -> {
 			if (g == null) {
 				return ResponseEntity.status(409).build();
 			} else {
