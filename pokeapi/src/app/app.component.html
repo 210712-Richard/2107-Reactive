@@ -1,0 +1,5 @@
+<input type="number" [(ngModel)]="id" (keydown.enter)="submit()">
+<button (click)="submit()">Search</button>
+<div *ngIf="pokemon">
+<app-pokemon [pokemon]="pokemon"></app-pokemon>
+</div>

@@ -1,0 +1,8 @@
+<div>
+  {{pokemon.id +': '+pokemon.name}}
+  <h2>{{getTypeBySlot(1)?.type?.name}}</h2>
+  <h3 *ngIf="getTypeBySlot(2)">{{getTypeBySlot(2)?.type?.name}}</h3>
+  <p>{{pokemon.height}} m</p>
+  <p>{{pokemon.weight}} kg</p>
+  <app-stats *ngIf="pokemon.stats" [stats]="pokemon.stats"></app-stats>
+</div>

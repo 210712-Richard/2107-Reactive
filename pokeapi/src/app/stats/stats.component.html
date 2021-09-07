@@ -1,0 +1,16 @@
+<table>
+<thead>
+  <tr>
+    <th>Name</th>
+    <th>Effort</th>
+    <th>Value</th>
+  </tr>
+</thead>
+<tbody>
+  <tr *ngFor="let stat of stats">
+    <td>{{stat.stat.name}}</td>
+    <td>{{stat.effort}}</td>
+    <td>{{stat.base_stat}}</td>
+  </tr>
+</tbody>
+</table>
